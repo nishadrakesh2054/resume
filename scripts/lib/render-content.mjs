@@ -6,6 +6,7 @@ import {
   renderMarkdown,
   renderTagsHtml,
   absoluteUrl,
+  normalizePublicUrl,
   SITE_ORIGIN,
 } from './html-utils.mjs';
 
@@ -28,8 +29,9 @@ export function renderBlogFeed(posts, linkPrefix = '') {
   const showFeaturedBadge = Boolean(featured.featured);
 
   const renderFeatured = (post) => {
-    const img = post.cover_image_url
-      ? `<div class="blog-featured__visual"><img src="${escapeHtml(optimizeImageUrl(post.cover_image_url, 960))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" loading="eager" decoding="async" /><div class="blog-featured__shine" aria-hidden="true"></div></div>`
+    const cover = normalizePublicUrl(post.cover_image_url);
+    const img = cover
+      ? `<div class="blog-featured__visual"><img src="${escapeHtml(optimizeImageUrl(cover, 960))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" loading="eager" decoding="async" /><div class="blog-featured__shine" aria-hidden="true"></div></div>`
       : `<div class="blog-featured__visual blog-featured__visual--placeholder" aria-hidden="true"><i class="bi bi-journal-richtext"></i></div>`;
     const readTime = post.reading_time_minutes ? `${post.reading_time_minutes} min read` : '';
     return `
@@ -54,8 +56,9 @@ export function renderBlogFeed(posts, linkPrefix = '') {
   };
 
   const renderItem = (post, i) => {
-    const img = post.cover_image_url
-      ? `<div class="blog-item__thumb"><img src="${escapeHtml(optimizeImageUrl(post.cover_image_url, 400))}" alt="" loading="lazy" decoding="async" /></div>`
+    const cover = normalizePublicUrl(post.cover_image_url);
+    const img = cover
+      ? `<div class="blog-item__thumb"><img src="${escapeHtml(optimizeImageUrl(cover, 400))}" alt="" loading="lazy" decoding="async" /></div>`
       : `<div class="blog-item__thumb blog-item__thumb--empty"><i class="bi bi-file-text" aria-hidden="true"></i></div>`;
     const readTime = post.reading_time_minutes ? `${post.reading_time_minutes} min` : '';
     return `
@@ -88,13 +91,14 @@ export function renderBlogPostPage(post) {
   const slug = post.slug;
   const title = post.meta_title || `${post.title} | Rakesh Kumar Sahani`;
   const description = post.meta_description || post.excerpt || '';
-  const canonical = post.canonical_url || absoluteUrl(`/blog/${slug}/`);
-  const ogImage = post.og_image_url || post.cover_image_url || '';
+  const canonical = normalizePublicUrl(post.canonical_url) || absoluteUrl(`/blog/${slug}/`);
+  const ogImage = normalizePublicUrl(post.og_image_url || post.cover_image_url || '');
   const bodyHtml =
     post.body_format === 'html' ? String(post.body || '') : renderMarkdown(String(post.body || ''));
 
-  const hero = post.cover_image_url
-    ? `<div class="content-detail-hero"><img src="${escapeHtml(optimizeImageUrl(post.cover_image_url, 1200))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" /></div>`
+  const coverUrl = normalizePublicUrl(post.cover_image_url);
+  const hero = coverUrl
+    ? `<div class="content-detail-hero"><img src="${escapeHtml(optimizeImageUrl(coverUrl, 1200))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" /></div>`
     : '';
 
   const metaParts = [
@@ -161,8 +165,9 @@ export function renderCaseFeed(studies, linkPrefix = '') {
   return `<div class="case-feed">${studies
     .map((item, index) => {
       const reversed = index % 2 === 1;
-      const img = item.cover_image_url
-        ? `<div class="case-row__media"><img src="${escapeHtml(optimizeImageUrl(item.cover_image_url, 900))}" alt="${escapeHtml(item.cover_image_alt || item.title)}" loading="lazy" decoding="async" /><div class="case-row__media-glow" aria-hidden="true"></div></div>`
+      const cover = normalizePublicUrl(item.cover_image_url);
+      const img = cover
+        ? `<div class="case-row__media"><img src="${escapeHtml(optimizeImageUrl(cover, 900))}" alt="${escapeHtml(item.cover_image_alt || item.title)}" loading="lazy" decoding="async" /><div class="case-row__media-glow" aria-hidden="true"></div></div>`
         : `<div class="case-row__media case-row__media--placeholder" aria-hidden="true"><i class="bi bi-window-stack"></i></div>`;
       const company = item.company || item.client_name;
       const category = item.category ? formatCategory(item.category) : '';
@@ -238,12 +243,14 @@ export function renderCaseStudyPage(item) {
   const slug = item.slug;
   const title = item.meta_title || `${item.title} Case Study | Rakesh Kumar Sahani`;
   const description = item.meta_description || item.excerpt || '';
-  const canonical = item.canonical_url || absoluteUrl(`/case-studies/${slug}/`);
-  const ogImage = item.og_image_url || item.hero_image_url || item.cover_image_url || '';
+  const canonical = normalizePublicUrl(item.canonical_url) || absoluteUrl(`/case-studies/${slug}/`);
+  const ogImage = normalizePublicUrl(
+    item.og_image_url || item.hero_image_url || item.cover_image_url || ''
+  );
   const bodyHtml =
     item.body_format === 'html' ? String(item.body || '') : renderMarkdown(String(item.body || ''));
 
-  const heroSrc = item.hero_image_url || item.cover_image_url;
+  const heroSrc = normalizePublicUrl(item.hero_image_url || item.cover_image_url);
   const hero = heroSrc
     ? `<div class="content-detail-hero"><img src="${escapeHtml(optimizeImageUrl(heroSrc, 1200))}" alt="${escapeHtml(item.cover_image_alt || item.title)}" /></div>`
     : '';

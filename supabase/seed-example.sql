@@ -88,7 +88,7 @@ INSERT INTO public.blog_posts (
   'A practical DevOps guide from my portfolio stack',
   'Step-by-step notes on shipping a Next.js app with Docker, Coolify, and Cloudflare — what I use on client projects.',
   '## Introduction\n\nWrite your tutorial content in **markdown** here.\n\n## Prerequisites\n\n- Docker\n- Coolify instance\n\n## Steps\n\n1. Build image\n2. Configure domain\n3. Enable SSL',
-  'https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.webp',
+  'https://rakeshsahani.vercel.app/assets/img/profile/alex1.webp',
   'Rakesh Kumar Sahani — developer portrait',
   'devops',
   ARRAY['coolify', 'docker', 'nextjs', 'devops'],

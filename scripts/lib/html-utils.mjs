@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 
-export const SITE_ORIGIN = 'https://nishadrakesh2054.github.io/rakesh';
+export const SITE_ORIGIN = 'https://rakeshsahani.vercel.app';
 
 marked.setOptions({ gfm: true, breaks: false });
 
@@ -46,6 +46,16 @@ export function absoluteUrl(path) {
   const base = SITE_ORIGIN.replace(/\/$/, '');
   const p = path.startsWith('/') ? path : `/${path}`;
   return `${base}${p}`;
+}
+
+/** Rewrite legacy GitHub Pages URLs to current live origin. */
+export function normalizePublicUrl(url) {
+  const trimmed = (url || '').trim();
+  if (!trimmed) return trimmed;
+  return trimmed.replace(
+    /https?:\/\/nishadrakesh2054\.github\.io\/rakesh\/?/gi,
+    `${SITE_ORIGIN.replace(/\/$/, '')}/`
+  );
 }
 
 export function renderMarkdown(md) {
