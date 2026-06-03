@@ -65,7 +65,7 @@
             <img src="${escapeHtml(img)}" alt="${escapeHtml(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="800" height="360" />
           </a>
           <div class="project-card-body">
-            <h4 class="project-card-title">${escapeHtml(project.ProjectName)}</h4>
+            <h3 class="project-card-title">${escapeHtml(project.ProjectName)}</h3>
             <p class="project-card-meta">${escapeHtml(project.category)}</p>
             <div class="project-card-tags">${renderStackTags(project)}</div>
             ${liveLink}
@@ -116,8 +116,9 @@
             id="${tabId}"
             class="portfolio-company-tab${isActive ? ' is-active' : ''}"
             role="tab"
-            aria-selected="${isActive}"
+            aria-selected="${isActive ? 'true' : 'false'}"
             aria-controls="portfolio-grid-panel"
+            tabindex="${isActive ? '0' : '-1'}"
             data-company="${escapeHtml(key)}"
           >
             <span class="portfolio-company-tab-label">${escapeHtml(label)}</span>
@@ -127,14 +128,25 @@
       })
       .join('');
 
+    const panel = document.getElementById('portfolio-grid-panel');
+    const activeTab = nav.querySelector('.portfolio-company-tab.is-active');
+    if (panel && activeTab) {
+      panel.setAttribute('aria-labelledby', activeTab.id);
+    }
+
     nav.querySelectorAll('.portfolio-company-tab').forEach((btn) => {
       btn.addEventListener('click', () => {
         activeCompany = btn.getAttribute('data-company');
         isExpanded = false;
+        const panel = document.getElementById('portfolio-grid-panel');
         nav.querySelectorAll('.portfolio-company-tab').forEach((tab) => {
           const selected = tab === btn;
           tab.classList.toggle('is-active', selected);
           tab.setAttribute('aria-selected', selected ? 'true' : 'false');
+          tab.setAttribute('tabindex', selected ? '0' : '-1');
+          if (selected && panel) {
+            panel.setAttribute('aria-labelledby', tab.id);
+          }
         });
         renderGridPanel();
       });

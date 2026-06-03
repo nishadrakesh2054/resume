@@ -1,25 +1,63 @@
 /**
- * Mobile-first performance — LCP, render path, below-fold deferrals
+ * Mobile-only performance — hero LCP, lighter paint, layout before Bootstrap loads
  */
 
-/* Hero must paint immediately (AOS loads late via idle callback) */
-#hero [data-aos],
-#hero [data-aos].aos-animate {
-  opacity: 1 !important;
-  transform: none !important;
-  transition: none !important;
-}
-
-/* LCP image: prioritize decode on mobile */
 @media (max-width: 991.98px) {
+  :root {
+    --background-color: #0b1120;
+    --default-color: #9ca3af;
+    --heading-color: #f9fafb;
+    --accent-highlight: #06b6d4;
+    --default-font: "Roboto", system-ui, sans-serif;
+    --heading-font: "Mulish", system-ui, sans-serif;
+  }
+
+  body.index-page {
+    background: var(--background-color);
+  }
+
+  /* Hero paints before Bootstrap (loaded async on mobile) */
+  .hero .container {
+    width: 100%;
+    max-width: 1140px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  .hero-row {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 0;
+  }
+
+  .hero-content-col,
+  .hero-visual-col {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .hero-visual-col {
+    order: 2;
+  }
+
+  .hero-content-col {
+    order: 1;
+  }
+
+  /* AOS loads late — never hide hero or first screen */
+  #hero [data-aos],
+  #hero [data-aos].aos-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
   .hero {
     min-height: auto;
     padding-top: 88px;
     padding-bottom: 32px;
-  }
-
-  .hero-row {
-    min-height: 0;
   }
 
   .hero .hero-portrait {

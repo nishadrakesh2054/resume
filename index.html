@@ -99,31 +99,36 @@
     <link rel="preload" href="assets/img/profile/alex1.webp" as="image" type="image/webp" fetchpriority="high" />
     <link rel="preload" href="assets/fonts/mulish-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/roboto-400.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="assets/css/critical-home.css" />
-    <link rel="stylesheet" href="assets/css/mobile-performance.css" />
-    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" />
+    <!-- Core path: sync on all viewports (restores desktop LCP/layout) -->
+    <link rel="stylesheet" href="assets/fonts/fonts-home.css" />
     <link rel="stylesheet" href="assets/css/premium.css" />
-    <link rel="stylesheet" href="assets/css/main.css" media="print" onload="this.media='all'" />
-    <link rel="stylesheet" href="assets/fonts/fonts.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <!-- Desktop: Bootstrap blocks; mobile: non-blocking + async load below -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" media="(min-width: 992px)" />
+    <link
+      rel="stylesheet"
+      href="assets/vendor/bootstrap/css/bootstrap.min.css"
+      media="print"
+      onload="this.media='(max-width: 991.98px)'"
+    />
+    <link rel="stylesheet" href="assets/css/mobile-performance.css" media="(max-width: 991.98px)" />
+    <!-- Non-critical: async on all viewports -->
+    <link rel="stylesheet" href="assets/fonts/fonts-deferred.css" media="print" onload="this.media='all'" />
     <link
       rel="stylesheet"
       href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css"
       media="print"
       onload="this.media='all'"
     />
-    <link
-      rel="stylesheet"
-      href="assets/vendor/aos/aos.css"
-      media="print"
-      onload="this.media='all'"
-    />
+    <link rel="stylesheet" href="assets/vendor/aos/aos.css" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="assets/css/a11y-performance.css" media="print" onload="this.media='all'" />
     <noscript>
-      <link rel="stylesheet" href="assets/css/main.css" />
-      <link rel="stylesheet" href="assets/fonts/fonts.css" />
+      <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="assets/fonts/fonts-deferred.css" />
       <link rel="stylesheet" href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" />
       <link rel="stylesheet" href="assets/vendor/aos/aos.css" />
       <link rel="stylesheet" href="assets/css/a11y-performance.css" />
+      <link rel="stylesheet" href="assets/css/mobile-performance.css" />
     </noscript>
   </head>
 
@@ -264,7 +269,7 @@
                     width="500"
                     height="600"
                     fetchpriority="high"
-                    decoding="sync"
+                    decoding="async"
                     loading="eager"
                   />
                 </picture>
@@ -328,7 +333,7 @@
                 </div>
 
                 <div class="profile-actions">
-                  <a href="assets/img/cv.pdf" class="btn-primary" target="_blank"
+                  <a href="assets/img/cv.pdf" class="btn-primary" target="_blank" rel="noopener noreferrer"
                     ><i class="bi bi-download"></i> Download CV</a
                   >
                 </div>
@@ -478,7 +483,7 @@
                   data-aos="fade-up"
                   data-aos-delay="100"
                 >
-                  <h5 class="mb-5 text-start fw-bold">Frontend Development</h5>
+                  <h3 class="mb-5 text-start fw-bold">Frontend Development</h3>
                   <div class="skills-list skills-animation">
                     <div class="skill-item">
                       <div class="skill-info">
@@ -619,9 +624,9 @@
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
-                  <h5 class="mb-5 text-start fw-bold">
+                  <h3 class="mb-5 text-start fw-bold">
                     Backend &amp; Databases
-                  </h5>
+                  </h3>
                   <div class="skills-list skills-animation">
                     <div class="skill-item">
                       <div class="skill-info">
@@ -743,9 +748,9 @@
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  <h5 class="mb-5 text-start fw-bold">
+                  <h3 class="mb-5 text-start fw-bold">
                     Mobile, CMS &amp; Others
-                  </h5>
+                  </h3>
                   <div class="skills-list skills-animation">
                    
                     <div class="skill-item">
@@ -842,9 +847,9 @@
                   data-aos="fade-up"
                   data-aos-delay="400"
                 >
-                  <h5 class="mb-5 text-start fw-bold">
+                  <h3 class="mb-5 text-start fw-bold">
                     DevOps &amp; Deployment
-                  </h5>
+                  </h3>
                   <div class="skills-list skills-animation">
                     <div class="skill-item">
                       <div class="skill-info">
@@ -1149,7 +1154,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-palette"></i>
                 </div>
-                <h4>Frontend Development</h4>
+                <h3 class="service-item__title">Frontend Development</h3>
                 <p class="service-outcome text-start">
                   Fast, accessible interfaces that convert and scale.
                 </p>
@@ -1175,7 +1180,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-code-slash"></i>
                 </div>
-                <h4>Full-Stack Development</h4>
+                <h3 class="service-item__title">Full-Stack Development</h3>
                 <p class="service-outcome text-start">
                   End-to-end products — one owner from API to UI.
                 </p>
@@ -1200,7 +1205,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-server"></i>
                 </div>
-                <h4>Backend &amp; API Development</h4>
+                <h3 class="service-item__title">Backend &amp; API Development</h3>
                 <p class="service-outcome text-start">
                   Reliable APIs and data models your frontend can trust.
                 </p>
@@ -1225,7 +1230,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-phone"></i>
                 </div>
-                <h4>Mobile App Development</h4>
+                <h3 class="service-item__title">Mobile App Development</h3>
                 <p class="service-outcome text-start">
                   Cross-platform apps without maintaining two codebases.
                 </p>
@@ -1250,7 +1255,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-wordpress"></i>
                 </div>
-                <h4>CMS &amp; Headless Solutions</h4>
+                <h3 class="service-item__title">CMS &amp; Headless Solutions</h3>
                 <p class="service-outcome text-start">
                   Content teams edit freely; devs ship fast on the front end.
                 </p>
@@ -1275,7 +1280,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-cloud-arrow-up"></i>
                 </div>
-                <h4>Deployment &amp; DevOps</h4>
+                <h3 class="service-item__title">Deployment &amp; DevOps</h3>
                 <p class="service-outcome text-start">
                   Go live with confidence — monitored, secure, repeatable.
                 </p>
@@ -1300,7 +1305,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-search"></i>
                 </div>
-                <h4>SEO &amp; Performance</h4>
+                <h3 class="service-item__title">SEO &amp; Performance</h3>
                 <p class="service-outcome text-start">
                   Rank better and load faster — technical SEO built in.
                 </p>
@@ -1324,7 +1329,7 @@
                 <div class="icon-wrapper">
                   <i class="bi bi-shield-lock"></i>
                 </div>
-                <h4>Security &amp; Authentication</h4>
+                <h3 class="service-item__title">Security &amp; Authentication</h3>
                 <p class="service-outcome text-start">
                   Protect users and data with production-grade auth patterns.
                 </p>
@@ -1408,7 +1413,7 @@
             class="portfolio-grid-panel"
             role="tabpanel"
             tabindex="0"
-            aria-labelledby="portfolio-heading"
+            aria-labelledby="portfolio-tab-all"
             data-aos="fade-up"
             data-aos-delay="200"
           ></div>
@@ -1953,7 +1958,7 @@
           </div>
 
           <div class="col-lg-2 col-6 footer-links">
-            <h4>Quick Links</h4>
+            <h3 class="footer-heading">Quick Links</h3>
             <ul>
               <li><a href="#hero">Home</a></li>
               <li><a href="#about">About</a></li>
@@ -1967,7 +1972,7 @@
           </div>
 
           <div class="col-lg-2 col-6 footer-links">
-            <h4>My Services</h4>
+            <h3 class="footer-heading">My Services</h3>
             <ul>
               <li><a href="#services">Frontend Development</a></li>
               <li><a href="#services">Full-Stack Development</a></li>
@@ -1981,7 +1986,7 @@
           <div
             class="col-lg-3 col-md-12 footer-contact text-center text-md-start"
           >
-            <h4>Contact Me</h4>
+            <h3 class="footer-heading">Contact Me</h3>
             <p class="mb-1"><strong>Location:</strong></p>
             <p>Kathmandu</p>
             <p>Nepal</p>
