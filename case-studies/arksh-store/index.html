@@ -61,32 +61,70 @@
     </header>
     <div id="mobile-nav-backdrop" class="mobile-nav-backdrop d-xl-none" aria-hidden="true" tabindex="-1"></div>
     <main id="main-content" class="main">
-    <section class="section">
-      <div class="container">
-        <article class="content-detail">
-          <nav class="content-breadcrumb" aria-label="Breadcrumb">
-            <a href="../">Case studies</a> / <span>Arksh Store</span>
+    <section class="section content-detail-section">
+      <div class="container container-xl">
+        <article class="content-detail case-detail">
+          <nav class="content-breadcrumb content-breadcrumb--on-hero" aria-label="Breadcrumb">
+            <a href="../">Case studies</a>
+            <span class="content-breadcrumb__sep" aria-hidden="true">/</span>
+            <span class="content-breadcrumb__current">Arksh Store</span>
           </nav>
-          <div class="content-detail-hero"><img src="https://res.cloudinary.com/doaiilrxn/image/upload/w_1200,f_auto,q_auto/v1780367651/arkshstore_owilqq.png" alt="Arksh Store ecommerce homepage screenshot" /></div>
-          <h1>Arksh Store</h1>
-          <p class="lead">Modern ecommerce from catalog to checkout</p>
-          <div class="content-detail-meta">Arksh Group · Arksh Group · Full-stack developer · Jun 3, 2026</div>
-          <div class="content-stack"><span class="content-tag">Next.js</span><span class="content-tag">Node.js</span><span class="content-tag">PostgreSQL</span><span class="content-tag">Tailwind CSS</span><span class="content-tag">Prisma ORM</span></div>
-          <div class="content-actions"><a class="btn btn-primary" href="https://arkshstore.com" target="_blank" rel="noopener noreferrer">Live site</a></div>
+          <header class="case-detail-hero">
+            <div class="case-detail-hero__media"><img src="https://res.cloudinary.com/doaiilrxn/image/upload/w_1400,f_auto,q_auto/v1780367651/arkshstore_owilqq.png" alt="Arksh Store ecommerce homepage screenshot" width="1400" height="560" decoding="async" fetchpriority="high" /><div class="case-detail-hero__overlay" aria-hidden="true"></div></div>
+            <div class="case-detail-hero__content">
+              <span class="case-chip">ecommerce</span>
+              <h1 class="case-detail-hero__title">Arksh Store</h1>
+              <p class="case-detail-hero__tagline">Modern ecommerce from catalog to checkout</p>
+              <div class="detail-meta-chips"><span class="detail-chip detail-chip--client"><i class="bi bi-building" aria-hidden="true"></i> Arksh Group</span><span class="detail-chip">ecommerce</span><span class="detail-chip"><i class="bi bi-person-badge" aria-hidden="true"></i> Full-stack developer</span><span class="detail-chip"><i class="bi bi-calendar3" aria-hidden="true"></i> Jun 3, 2026</span></div>
+            </div>
+          </header>
+          <div class="case-detail-toolbar">
+            <div class="case-detail-toolbar__stack"><span class="case-stack__item">Next.js</span><span class="case-stack__item">Node.js</span><span class="case-stack__item">PostgreSQL</span><span class="case-stack__item">Tailwind CSS</span><span class="case-stack__item">Prisma ORM</span></div>
+            <div class="case-detail-toolbar__actions"><a class="btn btn-primary case-detail-toolbar__btn" href="https://arkshstore.com" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Live site</a></div>
+          </div>
           <div class="content-metrics"><div class="content-metric"><span class="content-metric-value">Next.js + PostgreSQL</span><span class="content-metric-label">Stack</span></div><div class="content-metric"><span class="content-metric-value">Full-stack lead</span><span class="content-metric-label">Role</span></div></div>
-          <section class="content-block"><h2>Overview</h2><p>Arksh Store is a clothing ecommerce platform for the Arksh Group brand.</p></section>
-          <section class="content-block"><h2>Challenge</h2><p>Legacy workflows and slow catalog updates limited marketing launches.</p></section>
-          <section class="content-block"><h2>Solution</h2><p>Next.js App Router storefront, Prisma ORM on PostgreSQL, optimized images via Cloudinary, and deployment on Coolify with Docker.</p></section>
-          <section class="content-block"><h2>Results</h2><p>Faster catalog updates, improved Core Web Vitals, and a maintainable admin-friendly data model.</p></section>
-          
-          <div class="content-gallery"><figure><img src="https://res.cloudinary.com/doaiilrxn/image/upload/w_800,f_auto,q_auto/v1780367651/arkshstore_owilqq.png" alt="Arksh Store homepage" loading="lazy" /><figcaption>Storefront</figcaption></figure></div>
-          <div class="content-prose"><h2>Technical deep dive</h2>
+          <div class="case-narrative">
+      <article class="case-narrative__card" style="--narrative-i: 0">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi bi-compass"></i></div>
+        <span class="case-narrative__step">01</span>
+        <h2 class="case-narrative__title">Overview</h2>
+        <p class="case-narrative__text">Arksh Store is a clothing ecommerce platform for the Arksh Group brand.</p>
+      </article>
+      <article class="case-narrative__card" style="--narrative-i: 1">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi bi-lightning"></i></div>
+        <span class="case-narrative__step">02</span>
+        <h2 class="case-narrative__title">Challenge</h2>
+        <p class="case-narrative__text">Legacy workflows and slow catalog updates limited marketing launches.</p>
+      </article>
+      <article class="case-narrative__card" style="--narrative-i: 2">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi bi-gear-wide-connected"></i></div>
+        <span class="case-narrative__step">03</span>
+        <h2 class="case-narrative__title">Solution</h2>
+        <p class="case-narrative__text">Next.js App Router storefront, Prisma ORM on PostgreSQL, optimized images via Cloudinary, and deployment on Coolify with Docker.</p>
+      </article>
+      <article class="case-narrative__card" style="--narrative-i: 3">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi bi-graph-up-arrow"></i></div>
+        <span class="case-narrative__step">04</span>
+        <h2 class="case-narrative__title">Results</h2>
+        <p class="case-narrative__text">Faster catalog updates, improved Core Web Vitals, and a maintainable admin-friendly data model.</p>
+      </article></div>
+          <div class="content-gallery content-gallery--detail"><figure><img src="https://res.cloudinary.com/doaiilrxn/image/upload/w_800,f_auto,q_auto/v1780367651/arkshstore_owilqq.png" alt="Arksh Store homepage" loading="lazy" /><figcaption>Storefront</figcaption></figure></div>
+          <section class="content-prose-card content-prose-card--case">
+        <h2 class="content-prose-card__label">Technical deep dive</h2>
+        <div class="content-prose"><h2>Technical deep dive</h2>
 <p>Add architecture notes, API design, and deployment details here.</p>
 </div>
+      </section>
           
-          <div class="content-tags"><span class="content-tag">ecommerce</span><span class="content-tag">nextjs</span><span class="content-tag">postgresql</span><span class="content-tag">nepal</span></div>
+          <div class="case-detail-tags"><div class="content-tags"><span class="content-tag">ecommerce</span><span class="content-tag">nextjs</span><span class="content-tag">postgresql</span><span class="content-tag">nepal</span></div></div>
           
-          <p class="mt-4"><a href="../" class="btn btn-outline-light btn-sm">← All case studies</a></p>
+          
+    <footer class="content-detail-footer">
+      <a href="../" class="content-detail-back">
+        <span class="content-detail-back__icon" aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+        <span class="content-detail-back__text">All case studies</span>
+      </a>
+    </footer>
         </article>
       </div>
     </section></main>

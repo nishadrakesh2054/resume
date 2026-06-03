@@ -61,18 +61,32 @@
     </header>
     <div id="mobile-nav-backdrop" class="mobile-nav-backdrop d-xl-none" aria-hidden="true" tabindex="-1"></div>
     <main id="main-content" class="main">
-    <section class="section">
-      <div class="container">
-        <article class="content-detail">
+    <section class="section content-detail-section">
+      <div class="container container-xl">
+        <article class="content-detail blog-detail">
           <nav class="content-breadcrumb" aria-label="Breadcrumb">
-            <a href="../">Blog</a> / <span>Deploy Next.js with Coolify and Docker</span>
+            <a href="../">Blog</a>
+            <span class="content-breadcrumb__sep" aria-hidden="true">/</span>
+            <span class="content-breadcrumb__current">Deploy Next.js with Coolify and Docker</span>
           </nav>
-          <div class="content-detail-hero"><img src="https://rakeshsahani.vercel.app/assets/img/profile/alex1.webp" alt="Rakesh Kumar Sahani — developer portrait" /></div>
-          <h1>Deploy Next.js with Coolify and Docker</h1>
-          <p class="lead">A practical DevOps guide from my portfolio stack</p>
-          <div class="content-detail-meta">Jun 3, 2026 · Rakesh Kumar Sahani · 8 min read · devops</div>
-          <div class="content-tags"><span class="content-tag">coolify</span><span class="content-tag">docker</span><span class="content-tag">nextjs</span><span class="content-tag">devops</span></div>
-          <div class="content-prose"><h2>Introduction</h2>
+          <header class="blog-detail-hero">
+            <div class="blog-detail-hero__grid">
+              <div class="blog-detail-hero__copy">
+                <span class="blog-pill">devops</span>
+                <h1 class="blog-detail-hero__title">Deploy Next.js with Coolify and Docker</h1>
+                <p class="blog-detail-hero__subtitle">A practical DevOps guide from my portfolio stack</p>
+                <div class="detail-meta-chips"><span class="detail-chip detail-chip--category">devops</span><span class="detail-chip"><i class="bi bi-calendar3" aria-hidden="true"></i> Jun 3, 2026</span><span class="detail-chip"><i class="bi bi-clock" aria-hidden="true"></i> 8 min read</span><span class="detail-chip"><i class="bi bi-person" aria-hidden="true"></i> Rakesh Kumar Sahani</span></div>
+              </div>
+              <div class="blog-detail-hero__media">
+        <img src="https://rakeshsahani.vercel.app/assets/img/profile/alex1.webp" alt="Rakesh Kumar Sahani — developer portrait" width="640" height="400" decoding="async" />
+        <div class="blog-detail-hero__frame" aria-hidden="true"></div>
+      </div>
+            </div>
+          </header>
+          <div class="content-detail-layout">
+            <div class="content-detail-main">
+              <div class="content-prose-card">
+                <div class="content-prose"><h2>Introduction</h2>
 <p>Write your tutorial content in <strong>markdown</strong> here.</p>
 <h2>Prerequisites</h2>
 <ul>
@@ -86,8 +100,35 @@
 <li>Enable SSL</li>
 </ol>
 </div>
-          <aside class="content-related"><h2>Related case studies</h2><ul><li><a href="../../case-studies/arksh-store/">arksh store</a></li></ul></aside>
-          <p class="mt-4"><a href="../" class="btn btn-outline-light btn-sm">← All posts</a></p>
+              </div>
+              
+    <aside class="content-related-card">
+      <h2 class="content-related-card__title">Related case studies</h2>
+      <ul class="content-related-card__list">
+        <li><a href="../../case-studies/arksh-store/">Arksh Store</a></li>
+      </ul>
+    </aside>
+              
+    <footer class="content-detail-footer">
+      <a href="../" class="content-detail-back">
+        <span class="content-detail-back__icon" aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+        <span class="content-detail-back__text">All posts</span>
+      </a>
+    </footer>
+            </div>
+            <aside class="content-detail-aside" aria-label="Article info">
+              <div class="content-detail-aside__card content-detail-aside__card--author">
+                <div class="content-detail-aside__avatar" aria-hidden="true"><i class="bi bi-person-circle"></i></div>
+                <p class="content-detail-aside__label">Written by</p>
+                <p class="content-detail-aside__name">Rakesh Kumar Sahani</p>
+                <p class="content-detail-aside__hint">Full-stack developer · Nepal</p>
+              </div>
+              <div class="content-detail-aside__card">
+          <h2 class="content-detail-aside__heading">Topics</h2>
+          <div class="content-tags"><span class="content-tag">coolify</span><span class="content-tag">docker</span><span class="content-tag">nextjs</span><span class="content-tag">devops</span></div>
+        </div>
+            </aside>
+          </div>
         </article>
       </div>
     </section></main>

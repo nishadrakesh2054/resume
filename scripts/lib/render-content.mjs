@@ -97,44 +97,72 @@ export function renderBlogPostPage(post) {
     post.body_format === 'html' ? String(post.body || '') : renderMarkdown(String(post.body || ''));
 
   const coverUrl = normalizePublicUrl(post.cover_image_url);
-  const hero = coverUrl
-    ? `<div class="content-detail-hero"><img src="${escapeHtml(optimizeImageUrl(coverUrl, 1200))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" /></div>`
-    : '';
-
-  const metaParts = [
-    formatDate(post.published_at),
-    post.author_name,
-    post.reading_time_minutes ? `${post.reading_time_minutes} min read` : '',
-    post.category,
-  ].filter(Boolean);
+  const heroMedia = coverUrl
+    ? `<div class="blog-detail-hero__media">
+        <img src="${escapeHtml(optimizeImageUrl(coverUrl, 1200))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" width="640" height="400" decoding="async" />
+        <div class="blog-detail-hero__frame" aria-hidden="true"></div>
+      </div>`
+    : `<div class="blog-detail-hero__media blog-detail-hero__media--placeholder" aria-hidden="true">
+        <i class="bi bi-journal-richtext"></i>
+      </div>`;
 
   const related = Array.isArray(post.related_case_study_slugs)
     ? post.related_case_study_slugs.filter(Boolean)
     : [];
-  const relatedHtml = related.length
-    ? `<aside class="content-related"><h2>Related case studies</h2><ul>${related
-        .map(
-          (s) =>
-            `<li><a href="../../case-studies/${escapeHtml(s)}/">${escapeHtml(s.replace(/-/g, ' '))}</a></li>`
-        )
-        .join('')}</ul></aside>`
-    : '';
+  const relatedHtml = renderRelatedAside(
+    'Related case studies',
+    related.map((s) => ({
+      href: `../../case-studies/${s}/`,
+      label: slugToTitle(s),
+    }))
+  );
+
+  const tagsAside =
+    Array.isArray(post.tags) && post.tags.filter(Boolean).length
+      ? `<div class="content-detail-aside__card">
+          <h2 class="content-detail-aside__heading">Topics</h2>
+          ${renderTagsHtml(post.tags)}
+        </div>`
+      : '';
 
   const article = `
-    <section class="section">
-      <div class="container">
-        <article class="content-detail">
+    <section class="section content-detail-section">
+      <div class="container container-xl">
+        <article class="content-detail blog-detail">
           <nav class="content-breadcrumb" aria-label="Breadcrumb">
-            <a href="../">Blog</a> / <span>${escapeHtml(post.title)}</span>
+            <a href="../">Blog</a>
+            <span class="content-breadcrumb__sep" aria-hidden="true">/</span>
+            <span class="content-breadcrumb__current">${escapeHtml(post.title)}</span>
           </nav>
-          ${hero}
-          <h1>${escapeHtml(post.title)}</h1>
-          ${post.subtitle ? `<p class="lead">${escapeHtml(post.subtitle)}</p>` : ''}
-          <div class="content-detail-meta">${escapeHtml(metaParts.join(' · '))}</div>
-          ${renderTagsHtml(post.tags)}
-          <div class="content-prose">${bodyHtml}</div>
-          ${relatedHtml}
-          <p class="mt-4"><a href="../" class="btn btn-outline-light btn-sm">← All posts</a></p>
+          <header class="blog-detail-hero">
+            <div class="blog-detail-hero__grid">
+              <div class="blog-detail-hero__copy">
+                ${post.category ? `<span class="blog-pill">${escapeHtml(formatCategory(post.category))}</span>` : ''}
+                <h1 class="blog-detail-hero__title">${escapeHtml(post.title)}</h1>
+                ${post.subtitle ? `<p class="blog-detail-hero__subtitle">${escapeHtml(post.subtitle)}</p>` : ''}
+                ${renderBlogMetaChips(post)}
+              </div>
+              ${heroMedia}
+            </div>
+          </header>
+          <div class="content-detail-layout">
+            <div class="content-detail-main">
+              <div class="content-prose-card">
+                <div class="content-prose">${bodyHtml}</div>
+              </div>
+              ${relatedHtml}
+              ${renderDetailFooter('../', 'All posts')}
+            </div>
+            <aside class="content-detail-aside" aria-label="Article info">
+              <div class="content-detail-aside__card content-detail-aside__card--author">
+                <div class="content-detail-aside__avatar" aria-hidden="true"><i class="bi bi-person-circle"></i></div>
+                <p class="content-detail-aside__label">Written by</p>
+                <p class="content-detail-aside__name">${escapeHtml(post.author_name || 'Rakesh Kumar Sahani')}</p>
+                <p class="content-detail-aside__hint">Full-stack developer · Nepal</p>
+              </div>
+              ${tagsAside}
+            </aside>
+          </div>
         </article>
       </div>
     </section>`;
@@ -210,9 +238,118 @@ export function renderCaseFeed(studies, linkPrefix = '') {
     .join('')}</div>`;
 }
 
+const NARRATIVE_STEPS = [
+  { key: 'overview', title: 'Overview', icon: 'bi-compass' },
+  { key: 'challenge', title: 'Challenge', icon: 'bi-lightning' },
+  { key: 'solution', title: 'Solution', icon: 'bi-gear-wide-connected' },
+  { key: 'results', title: 'Results', icon: 'bi-graph-up-arrow' },
+];
+
 function renderBlock(title, text) {
   if (!text?.trim()) return '';
   return `<section class="content-block"><h2>${escapeHtml(title)}</h2><p>${escapeHtml(text)}</p></section>`;
+}
+
+function renderNarrativeGrid(item) {
+  const blocks = NARRATIVE_STEPS.map((step, i) => {
+    const text = item[step.key];
+    if (!text?.trim()) return '';
+    return `
+      <article class="case-narrative__card" style="--narrative-i: ${i}">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi ${step.icon}"></i></div>
+        <span class="case-narrative__step">0${i + 1}</span>
+        <h2 class="case-narrative__title">${escapeHtml(step.title)}</h2>
+        <p class="case-narrative__text">${escapeHtml(text)}</p>
+      </article>`;
+  }).filter(Boolean);
+  if (!blocks.length) return '';
+  const lessons = item.lessons_learned?.trim()
+    ? `<article class="case-narrative__card case-narrative__card--wide">
+        <div class="case-narrative__icon" aria-hidden="true"><i class="bi bi-journal-check"></i></div>
+        <h2 class="case-narrative__title">Lessons learned</h2>
+        <p class="case-narrative__text">${escapeHtml(item.lessons_learned)}</p>
+      </article>`
+    : '';
+  return `<div class="case-narrative">${blocks.join('')}${lessons}</div>`;
+}
+
+function renderBlogMetaChips(post) {
+  const chips = [];
+  if (post.category) {
+    chips.push(
+      `<span class="detail-chip detail-chip--category">${escapeHtml(formatCategory(post.category))}</span>`
+    );
+  }
+  if (post.published_at) {
+    chips.push(
+      `<span class="detail-chip"><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHtml(formatDate(post.published_at))}</span>`
+    );
+  }
+  if (post.reading_time_minutes) {
+    chips.push(
+      `<span class="detail-chip"><i class="bi bi-clock" aria-hidden="true"></i> ${escapeHtml(String(post.reading_time_minutes))} min read</span>`
+    );
+  }
+  if (post.author_name) {
+    chips.push(
+      `<span class="detail-chip"><i class="bi bi-person" aria-hidden="true"></i> ${escapeHtml(post.author_name)}</span>`
+    );
+  }
+  return chips.length ? `<div class="detail-meta-chips">${chips.join('')}</div>` : '';
+}
+
+function renderCaseMetaChips(item) {
+  const chips = [];
+  const company = item.company || item.client_name;
+  if (company) {
+    chips.push(
+      `<span class="detail-chip detail-chip--client"><i class="bi bi-building" aria-hidden="true"></i> ${escapeHtml(company)}</span>`
+    );
+  }
+  if (item.category) {
+    chips.push(`<span class="detail-chip">${escapeHtml(formatCategory(item.category))}</span>`);
+  }
+  if (item.role) {
+    chips.push(
+      `<span class="detail-chip"><i class="bi bi-person-badge" aria-hidden="true"></i> ${escapeHtml(item.role)}</span>`
+    );
+  }
+  if (item.published_at) {
+    chips.push(
+      `<span class="detail-chip"><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHtml(formatDate(item.published_at))}</span>`
+    );
+  }
+  if (item.duration_label) {
+    chips.push(`<span class="detail-chip">${escapeHtml(item.duration_label)}</span>`);
+  }
+  return chips.length ? `<div class="detail-meta-chips">${chips.join('')}</div>` : '';
+}
+
+function renderDetailFooter(backHref, backLabel) {
+  return `
+    <footer class="content-detail-footer">
+      <a href="${backHref}" class="content-detail-back">
+        <span class="content-detail-back__icon" aria-hidden="true"><i class="bi bi-arrow-left"></i></span>
+        <span class="content-detail-back__text">${escapeHtml(backLabel)}</span>
+      </a>
+    </footer>`;
+}
+
+function renderRelatedAside(title, links) {
+  if (!links.length) return '';
+  return `
+    <aside class="content-related-card">
+      <h2 class="content-related-card__title">${escapeHtml(title)}</h2>
+      <ul class="content-related-card__list">
+        ${links.map((l) => `<li><a href="${escapeHtml(l.href)}">${escapeHtml(l.label)}</a></li>`).join('')}
+      </ul>
+    </aside>`;
+}
+
+function slugToTitle(slug) {
+  return String(slug)
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 function renderMetrics(metrics) {
@@ -236,7 +373,7 @@ function renderGallery(gallery) {
         `<figure><img src="${escapeHtml(optimizeImageUrl(g.url, 800))}" alt="${escapeHtml(g.alt || '')}" loading="lazy" />${g.caption ? `<figcaption>${escapeHtml(g.caption)}</figcaption>` : ''}</figure>`
     )
     .join('');
-  return figures ? `<div class="content-gallery">${figures}</div>` : '';
+  return figures ? `<div class="content-gallery content-gallery--detail">${figures}</div>` : '';
 }
 
 export function renderCaseStudyPage(item) {
@@ -251,66 +388,89 @@ export function renderCaseStudyPage(item) {
     item.body_format === 'html' ? String(item.body || '') : renderMarkdown(String(item.body || ''));
 
   const heroSrc = normalizePublicUrl(item.hero_image_url || item.cover_image_url);
-  const hero = heroSrc
-    ? `<div class="content-detail-hero"><img src="${escapeHtml(optimizeImageUrl(heroSrc, 1200))}" alt="${escapeHtml(item.cover_image_alt || item.title)}" /></div>`
+  const heroMedia = heroSrc
+    ? `<img src="${escapeHtml(optimizeImageUrl(heroSrc, 1400))}" alt="${escapeHtml(item.cover_image_alt || item.title)}" width="1400" height="560" decoding="async" fetchpriority="high" />`
     : '';
 
   const stack = Array.isArray(item.stack) ? item.stack : [];
   const stackHtml = stack.length
-    ? `<div class="content-stack">${stack.map((t) => `<span class="content-tag">${escapeHtml(t)}</span>`).join('')}</div>`
+    ? `<div class="case-detail-toolbar__stack">${stack.map((t) => `<span class="case-stack__item">${escapeHtml(t)}</span>`).join('')}</div>`
     : '';
 
   const actions = [];
   if (item.live_url) {
     actions.push(
-      `<a class="btn btn-primary" href="${escapeHtml(item.live_url)}" target="_blank" rel="noopener noreferrer">Live site</a>`
+      `<a class="btn btn-primary case-detail-toolbar__btn" href="${escapeHtml(item.live_url)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i> Live site</a>`
     );
   }
   if (item.github_url) {
     actions.push(
-      `<a class="btn btn-outline-light" href="${escapeHtml(item.github_url)}" target="_blank" rel="noopener noreferrer">GitHub</a>`
+      `<a class="btn btn-outline-light case-detail-toolbar__btn" href="${escapeHtml(item.github_url)}" target="_blank" rel="noopener noreferrer"><i class="bi bi-github" aria-hidden="true"></i> GitHub</a>`
     );
   }
 
   const testimonial =
     item.testimonial_quote && item.testimonial_author
-      ? `<blockquote class="content-block mt-4"><p class="fst-italic">"${escapeHtml(item.testimonial_quote)}"</p><footer class="small text-muted">— ${escapeHtml(item.testimonial_author)}</footer></blockquote>`
+      ? `<blockquote class="case-testimonial">
+          <i class="bi bi-quote case-testimonial__mark" aria-hidden="true"></i>
+          <p class="case-testimonial__quote">${escapeHtml(item.testimonial_quote)}</p>
+          <footer class="case-testimonial__author">— ${escapeHtml(item.testimonial_author)}</footer>
+        </blockquote>`
       : '';
 
-  const metaParts = [item.company, item.client_name, item.role, formatDate(item.published_at), item.duration_label].filter(Boolean);
-
   const related = Array.isArray(item.related_blog_slugs) ? item.related_blog_slugs.filter(Boolean) : [];
-  const relatedHtml = related.length
-    ? `<aside class="content-related"><h2>Related articles</h2><ul>${related
-        .map((s) => `<li><a href="../../blog/${escapeHtml(s)}/">${escapeHtml(s.replace(/-/g, ' '))}</a></li>`)
-        .join('')}</ul></aside>`
+  const relatedHtml = renderRelatedAside(
+    'Related articles',
+    related.map((s) => ({
+      href: `../../blog/${s}/`,
+      label: slugToTitle(s),
+    }))
+  );
+
+  const metricsHtml = renderMetrics(item.metrics);
+  const narrativeHtml = renderNarrativeGrid(item);
+  const galleryHtml = renderGallery(item.gallery);
+  const proseHtml = bodyHtml.trim()
+    ? `<section class="content-prose-card content-prose-card--case">
+        <h2 class="content-prose-card__label">Technical deep dive</h2>
+        <div class="content-prose">${bodyHtml}</div>
+      </section>`
     : '';
+  const tagsHtml =
+    Array.isArray(item.tags) && item.tags.filter(Boolean).length
+      ? `<div class="case-detail-tags">${renderTagsHtml(item.tags)}</div>`
+      : '';
 
   const article = `
-    <section class="section">
-      <div class="container">
-        <article class="content-detail">
-          <nav class="content-breadcrumb" aria-label="Breadcrumb">
-            <a href="../">Case studies</a> / <span>${escapeHtml(item.title)}</span>
+    <section class="section content-detail-section">
+      <div class="container container-xl">
+        <article class="content-detail case-detail">
+          <nav class="content-breadcrumb content-breadcrumb--on-hero" aria-label="Breadcrumb">
+            <a href="../">Case studies</a>
+            <span class="content-breadcrumb__sep" aria-hidden="true">/</span>
+            <span class="content-breadcrumb__current">${escapeHtml(item.title)}</span>
           </nav>
-          ${hero}
-          <h1>${escapeHtml(item.title)}</h1>
-          ${item.tagline ? `<p class="lead">${escapeHtml(item.tagline)}</p>` : ''}
-          <div class="content-detail-meta">${escapeHtml(metaParts.join(' · '))}</div>
-          ${stackHtml}
-          ${actions.length ? `<div class="content-actions">${actions.join('')}</div>` : ''}
-          ${renderMetrics(item.metrics)}
-          ${item.overview ? renderBlock('Overview', item.overview) : ''}
-          ${renderBlock('Challenge', item.challenge)}
-          ${renderBlock('Solution', item.solution)}
-          ${renderBlock('Results', item.results)}
-          ${renderBlock('Lessons learned', item.lessons_learned)}
-          ${renderGallery(item.gallery)}
-          ${bodyHtml.trim() ? `<div class="content-prose">${bodyHtml}</div>` : ''}
+          <header class="case-detail-hero${heroMedia ? '' : ' case-detail-hero--no-media'}">
+            ${heroMedia ? `<div class="case-detail-hero__media">${heroMedia}<div class="case-detail-hero__overlay" aria-hidden="true"></div></div>` : '<div class="case-detail-hero__mesh" aria-hidden="true"></div>'}
+            <div class="case-detail-hero__content">
+              ${item.category ? `<span class="case-chip">${escapeHtml(formatCategory(item.category))}</span>` : ''}
+              <h1 class="case-detail-hero__title">${escapeHtml(item.title)}</h1>
+              ${item.tagline ? `<p class="case-detail-hero__tagline">${escapeHtml(item.tagline)}</p>` : ''}
+              ${renderCaseMetaChips(item)}
+            </div>
+          </header>
+          <div class="case-detail-toolbar">
+            ${stackHtml}
+            ${actions.length ? `<div class="case-detail-toolbar__actions">${actions.join('')}</div>` : ''}
+          </div>
+          ${metricsHtml}
+          ${narrativeHtml}
+          ${galleryHtml}
+          ${proseHtml}
           ${testimonial}
-          ${renderTagsHtml(item.tags)}
+          ${tagsHtml}
           ${relatedHtml}
-          <p class="mt-4"><a href="../" class="btn btn-outline-light btn-sm">← All case studies</a></p>
+          ${renderDetailFooter('../', 'All case studies')}
         </article>
       </div>
     </section>`;
