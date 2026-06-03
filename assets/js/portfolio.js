@@ -3,6 +3,7 @@
 
   const COMPANY_ORDER = ['Arksh Group', 'OneorEight', 'Navata Tech'];
   const INITIAL_VISIBLE = 4;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let projects = [];
   let activeCompany = 'all';
@@ -48,7 +49,8 @@
       .join('');
   }
 
-  function renderProjectCard(project) {
+  function renderProjectCard(project, options) {
+    const eager = options?.eager;
     const img = optimizeImageUrl(project.imageLink, 800);
     const alt = `${project.ProjectName} — web development project by Rakesh Kumar Sahani`;
     const link = escapeHtml(project.websiteLink);
@@ -60,7 +62,7 @@
       <div class="col-lg-6">
         <article class="portfolio-project-card portfolio-project-card--featured">
           <a href="${link}" class="project-card-image" target="_blank" rel="noopener noreferrer" aria-label="Open ${escapeHtml(project.ProjectName)}">
-            <img src="${escapeHtml(img)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" width="800" height="360" />
+            <img src="${escapeHtml(img)}" alt="${escapeHtml(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" width="800" height="360" />
           </a>
           <div class="project-card-body">
             <h4 class="project-card-title">${escapeHtml(project.ProjectName)}</h4>
@@ -107,12 +109,15 @@
       .map(({ key, label }) => {
         const count = getProjectsForTab(key).length;
         const isActive = key === activeCompany;
+        const tabId = `portfolio-tab-${key.replace(/\s+/g, '-').toLowerCase()}`;
         return `
           <button
             type="button"
+            id="${tabId}"
             class="portfolio-company-tab${isActive ? ' is-active' : ''}"
             role="tab"
             aria-selected="${isActive}"
+            aria-controls="portfolio-grid-panel"
             data-company="${escapeHtml(key)}"
           >
             <span class="portfolio-company-tab-label">${escapeHtml(label)}</span>
@@ -149,8 +154,36 @@
     }
 
     const visible = isExpanded ? list : list.slice(0, INITIAL_VISIBLE);
-    panel.innerHTML = `<div class="row gy-4">${visible.map((p) => renderProjectCard(p)).join('')}</div>`;
+    panel.innerHTML = `<div class="row gy-4">${visible
+      .map((p, index) => renderProjectCard(p, { eager: index < 2 }))
+      .join('')}</div>`;
     updateShowToggle(list);
+  }
+
+  function injectProjectSchema(list) {
+    const existing = document.getElementById('portfolio-itemlist-schema');
+    if (existing) existing.remove();
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'portfolio-itemlist-schema';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Web development portfolio — Rakesh Kumar Sahani',
+      numberOfItems: list.length,
+      itemListElement: list.map((project, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'WebSite',
+          name: project.ProjectName,
+          url: project.websiteLink,
+          description: `${project.category} — ${project.company}`,
+        },
+      })),
+    });
+    document.head.appendChild(script);
   }
 
   function bindShowToggle() {
@@ -162,7 +195,10 @@
       renderGridPanel();
       if (!isExpanded) {
         const panel = document.getElementById('portfolio-grid-panel');
-        panel?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        panel?.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+          block: 'nearest',
+        });
       }
     });
   }
@@ -183,6 +219,7 @@
       return;
     }
 
+    injectProjectSchema(projects);
     renderCompanyNav();
     bindShowToggle();
     renderGridPanel();

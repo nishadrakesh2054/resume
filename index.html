@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Update siteUrl in seo.config.json, sitemap.xml, robots.txt, and JSON-LD when you use a custom domain -->
-    <meta name="site-url" content="https://nishadrakesh2054.github.io/rakesh" />
-
     <title>
       Rakesh Kumar Sahani | Full Stack Developer Nepal — React, Next.js, MERN
     </title>
@@ -25,6 +22,8 @@
     <meta name="geo.region" content="NP-BA" />
     <meta name="geo.placename" content="Kathmandu, Nepal" />
     <meta name="language" content="English" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="format-detection" content="telephone=no" />
     <link rel="canonical" href="https://nishadrakesh2054.github.io/rakesh/" />
     <link rel="alternate" hreflang="en" href="https://nishadrakesh2054.github.io/rakesh/" />
     <link rel="alternate" hreflang="x-default" href="https://nishadrakesh2054.github.io/rakesh/" />
@@ -47,7 +46,7 @@
     />
     <meta
       property="og:image"
-      content="https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.png"
+      content="https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.webp"
     />
     <meta property="og:image:width" content="500" />
     <meta property="og:image:height" content="600" />
@@ -68,7 +67,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.png"
+      content="https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.webp"
     />
 
     <link rel="me" href="https://www.linkedin.com/in/rakesh-kumar-sahani-218229224/" />
@@ -94,20 +93,25 @@
     />
     <link rel="manifest" href="site.webmanifest" />
 
-    <!-- Fonts (subset weights for faster load) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Raleway:wght@500;600;700&family=Mulish:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="preload" href="assets/fonts/roboto-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/img/profile/alex1.webp" as="image" type="image/webp" fetchpriority="high" />
+    <link rel="preload" href="assets/vendor/bootstrap/css/bootstrap.min.css" as="style" />
+    <link rel="stylesheet" href="assets/fonts/fonts.css" />
 
     <!-- Vendor CSS Files -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.min.css" rel="stylesheet" />
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+    <link
+      rel="preload"
+      href="assets/vendor/aos/aos.css"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript><link href="assets/vendor/aos/aos.css" rel="stylesheet" /></noscript>
     <link href="assets/css/main.css" rel="stylesheet" />
     <link href="assets/css/premium.css" rel="stylesheet" />
+    <link href="assets/css/a11y-performance.css" rel="stylesheet" />
   </head>
 
   <body class="index-page">
@@ -117,14 +121,17 @@
         class="container-fluid container-xl position-relative d-flex align-items-center"
       >
         <a href="#hero" class="logo d-flex align-items-center me-auto" aria-label="Rakesh Sahani — Home">
-          <img
-            src="assets/img/logo.png"
-            alt="Rakesh Sahani — Full Stack Developer"
-            class="site-logo"
-            width="280"
-            height="60"
-            decoding="async"
-          />
+          <picture>
+            <source srcset="assets/img/logo.webp" type="image/webp" />
+            <img
+              src="assets/img/logo.png"
+              alt="Rakesh Sahani — Full Stack Developer"
+              class="site-logo"
+              width="280"
+              height="60"
+              decoding="async"
+            />
+          </picture>
         </a>
 
         <button
@@ -200,7 +207,12 @@
                 <a href="#portfolio" class="hero-link">
                   View my work <i class="bi bi-arrow-right" aria-hidden="true"></i>
                 </a>
-                <a href="https://wa.me/9779845892346" class="hero-link">
+                <a
+                  href="https://wa.me/9779845892346"
+                  class="hero-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                 HIRE ME <i class="bi bi-arrow-right" aria-hidden="true"></i>
                 </a>
               </div>
@@ -220,8 +232,13 @@
                   aria-label="Instagram"
                   ><i class="bi bi-instagram"></i
                 ></a>
-                <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
-                <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a
+                  href="https://github.com/nishadrakesh2054"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  ><i class="bi bi-github" aria-hidden="true"></i
+                ></a>
               </div>
             </div>
 
@@ -233,15 +250,18 @@
               <div class="hero-visual">
                 <div class="hero-visual-ring" aria-hidden="true"></div>
                 <div class="hero-visual-glow" aria-hidden="true"></div>
-                <img
-                  src="assets/img/profile/alex1.png"
-                  alt="Rakesh Kumar Sahani — Full Stack Developer"
-                  class="hero-portrait"
-                  width="500"
-                  height="600"
-                  fetchpriority="high"
-                  decoding="async"
-                />
+                <picture>
+                  <source srcset="assets/img/profile/alex1.webp" type="image/webp" />
+                  <img
+                    src="assets/img/profile/alex1.png"
+                    alt="Rakesh Kumar Sahani — Full Stack Developer"
+                    class="hero-portrait"
+                    width="500"
+                    height="600"
+                    fetchpriority="high"
+                    decoding="async"
+                  />
+                </picture>
              
               </div>
             </div>
@@ -254,7 +274,7 @@
       <section id="about" class="about section" aria-labelledby="about-heading">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle">About Me</span>
+          <h2 class="subtitle" id="about-heading">About Me</h2>
         </div>
         <!-- End Section Title -->
 
@@ -264,15 +284,18 @@
               <div class="profile-card">
                 <div class="profile-header">
                   <div class="profile-avatar">
-                    <img
-                      src="assets/img/profile/alex2.png"
-                      class="img-fluid"
-                      alt="Rakesh Kumar Sahani profile"
-                      width="400"
-                      height="400"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <picture>
+                      <source srcset="assets/img/profile/alex2.webp" type="image/webp" />
+                      <img
+                        src="assets/img/profile/alex2.png"
+                        class="img-fluid"
+                        alt="Rakesh Kumar Sahani profile"
+                        width="400"
+                        height="400"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
                     <div class="status-indicator"></div>
                   </div>
                   <h3>Rakesh Kumar Sahani</h3>
@@ -307,14 +330,25 @@
                 <div class="social-connect">
                   <a
                     href="https://www.linkedin.com/in/rakesh-kumar-sahani-218229224/"
-                    ><i class="bi bi-linkedin" target="_blank"></i
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    ><i class="bi bi-linkedin" aria-hidden="true"></i
                   ></a>
                   <a
                     href="https://www.instagram.com/its_sahani_ranzeth?igsh=MTlqcWMzdXFzOXhmcQ=="
-                    ><i class="bi bi-instagram" target="_blank"></i
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    ><i class="bi bi-instagram" aria-hidden="true"></i
                   ></a>
-                  <a href="#"><i class="bi bi-facebook"></i></a>
-                  <a href="#"><i class="bi bi-github"></i></a>
+                  <a
+                    href="https://github.com/nishadrakesh2054"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub"
+                    ><i class="bi bi-github" aria-hidden="true"></i
+                  ></a>
                 </div>
               </div>
             </div>
@@ -903,7 +937,7 @@
       <section id="resume" class="resume section" aria-labelledby="resume-heading">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle">Experience & Education</span>
+          <h2 class="subtitle" id="resume-heading">Experience &amp; Education</h2>
         
         </div>
         <!-- End Section Title -->
@@ -1081,7 +1115,7 @@
       <section id="services" class="services section" aria-labelledby="services-heading">
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle">Services</span>
+          <h2 class="subtitle" id="services-heading">Services</h2>
       
           <div class="services-audience" data-aos="fade-up" data-aos-delay="50">
             <span class="audience-pill"
@@ -1350,7 +1384,7 @@
       <!-- Portfolio Section -->
       <section id="portfolio" class="portfolio section" aria-labelledby="portfolio-heading">
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle" id="portfolio-heading">Projects &amp; Case Studies</span>
+          <h2 class="subtitle" id="portfolio-heading">Projects &amp; Case Studies</h2>
         </div>
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -1366,6 +1400,8 @@
             id="portfolio-grid-panel"
             class="portfolio-grid-panel"
             role="tabpanel"
+            tabindex="0"
+            aria-labelledby="portfolio-heading"
             data-aos="fade-up"
             data-aos-delay="200"
           ></div>
@@ -1408,7 +1444,7 @@
       <!-- Contact Section -->
       <section id="contact" class="contact section" aria-labelledby="contact-heading">
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle">Let's work together</span>
+          <h2 class="subtitle" id="contact-heading">Let's work together</h2>
         
        
         </div>
@@ -1586,17 +1622,17 @@
                     </div>
 
                     <div class="col-md-12 text-center contact-form-actions">
-                      <div class="loading">Sending…</div>
-                      <div class="sent-message">
+                      <div class="loading" role="status" aria-live="polite" hidden>Sending…</div>
+                      <div class="sent-message" role="status" aria-live="polite" hidden>
                         Your message has been sent. Thank you!
                       </div>
-                      <div class="error-message"></div>
+                      <div class="error-message" role="alert" aria-live="assertive" hidden></div>
 
-                      <button type="submit" id="contact-submit">
+                      <button type="submit" id="contact-submit" aria-describedby="contact-form-note">
                         <i class="bi bi-send" aria-hidden="true"></i>
                         Send message
                       </button>
-                      <p class="contact-form-note">
+                      <p class="contact-form-note" id="contact-form-note">
                         Prefer chat?
                         <a
                           href="https://wa.me/9779845892346"
@@ -1619,8 +1655,7 @@
       <!-- FAQ Section -->
       <section id="faq" class="faq section" aria-labelledby="faq-heading">
         <div class="container section-title" data-aos="fade-up">
-          <span class="subtitle">Frequently asked questions
-          </span>
+          <h2 class="subtitle" id="faq-heading">Frequently asked questions</h2>
         </div>
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -1867,15 +1902,18 @@
         <div class="row gy-4">
           <div class="col-lg-5 col-md-12 footer-about">
             <a href="#hero" class="logo d-flex align-items-center">
-              <img
-                src="assets/img/logo.png"
-                alt="Rakesh Sahani — Full Stack Developer"
-                class="site-logo site-logo--footer"
-                width="280"
-                height="60"
-                loading="lazy"
-                decoding="async"
-              />
+              <picture>
+                <source srcset="assets/img/logo.webp" type="image/webp" />
+                <img
+                  src="assets/img/logo.png"
+                  alt="Rakesh Sahani — Full Stack Developer"
+                  class="site-logo site-logo--footer"
+                  width="280"
+                  height="60"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </a>
             <p>
               Full-stack developer passionate about building modern, scalable
@@ -1885,17 +1923,24 @@
             <div class="social-links d-flex mt-4">
               <a
                 href="https://www.linkedin.com/in/rakesh-kumar-sahani-218229224/"
-                ><i class="bi bi-linkedin" target="_blank"></i
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                ><i class="bi bi-linkedin" aria-hidden="true"></i
               ></a>
               <a
                 href="https://www.instagram.com/its_sahani_ranzeth?igsh=MTlqcWMzdXFzOXhmcQ=="
-                ><i class="bi bi-instagram" target="_blank"></i
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                ><i class="bi bi-instagram" aria-hidden="true"></i
               ></a>
-              <a href="https://github.com/yourusername" target="_blank"
-                ><i class="bi bi-github"></i
-              ></a>
-              <a href="https://facebook.com/yourprofile" target="_blank"
-                ><i class="bi bi-facebook"></i
+              <a
+                href="https://github.com/nishadrakesh2054"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                ><i class="bi bi-github" aria-hidden="true"></i
               ></a>
             </div>
           </div>
@@ -1978,11 +2023,41 @@
 
     <!-- Vendor JS Files (deferred — does not block first paint) -->
     <script defer src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script defer src="assets/vendor/aos/aos.js"></script>
-    <script defer src="assets/vendor/typed.js/typed.umd.js"></script>
-    <script defer src="assets/vendor/waypoints/noframework.waypoints.js"></script>
     <script defer src="assets/js/portfolio.js"></script>
+    <script defer src="assets/js/accessibility.js"></script>
     <script defer src="assets/js/main.js"></script>
+    <script>
+      (function () {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const scripts = reduced
+          ? []
+          : [
+              'assets/vendor/aos/aos.js',
+              'assets/vendor/typed.js/typed.umd.js',
+              'assets/vendor/waypoints/noframework.waypoints.js',
+            ];
+        function load(src) {
+          return new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = src;
+            s.defer = true;
+            s.onload = resolve;
+            s.onerror = reject;
+            document.body.appendChild(s);
+          });
+        }
+        function loadEnhancements() {
+          scripts.reduce((p, src) => p.then(() => load(src)), Promise.resolve()).then(() => {
+            document.dispatchEvent(new Event('enhancements-loaded'));
+          });
+        }
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadEnhancements, { timeout: 2500 });
+        } else {
+          window.addEventListener('load', loadEnhancements, { once: true });
+        }
+      })();
+    </script>
 
     <script type="application/ld+json">
       {
@@ -2006,7 +2081,7 @@
             "about": { "@id": "https://nishadrakesh2054.github.io/rakesh/#person" },
             "primaryImageOfPage": {
               "@type": "ImageObject",
-              "url": "https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.png"
+              "url": "https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.webp"
             },
             "inLanguage": "en"
           },
@@ -2018,7 +2093,7 @@
             "jobTitle": "Senior Full Stack Engineer",
             "description": "Full stack and MERN developer specializing in React, Next.js, Node.js, Express, MongoDB, PostgreSQL, Docker, Coolify, and Cloudflare. Based in Kathmandu, Nepal.",
             "url": "https://nishadrakesh2054.github.io/rakesh/",
-            "image": "https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.png",
+            "image": "https://nishadrakesh2054.github.io/rakesh/assets/img/profile/alex1.webp",
             "email": "mailto:sahanirakesh877@gmail.com",
             "telephone": "+977-9845892346",
             "address": {
@@ -2047,7 +2122,9 @@
               "MERN stack"
             ],
             "sameAs": [
-              "https://www.linkedin.com/in/rakesh-kumar-sahani-218229224/"
+              "https://www.linkedin.com/in/rakesh-kumar-sahani-218229224/",
+              "https://github.com/nishadrakesh2054",
+              "https://www.instagram.com/its_sahani_ranzeth"
             ],
             "worksFor": { "@type": "Organization", "name": "Arksh Group" },
             "alumniOf": {

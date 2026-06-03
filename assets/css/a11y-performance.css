@@ -1,0 +1,76 @@
+/**
+ * Accessibility, performance, and best-practice enhancements
+ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .typed-cursor {
+    display: none !important;
+  }
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-highlight);
+  outline-offset: 3px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+.portfolio-company-tab:focus-visible {
+  outline: 2px solid var(--accent-highlight);
+  outline-offset: 3px;
+}
+
+.skip-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+#about,
+#resume,
+#services,
+#portfolio,
+#contact,
+#faq {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+picture {
+  display: block;
+  line-height: 0;
+}
+
+.contact-honey {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.contact-form-actions .loading:not(.d-block),
+.contact-form-actions .sent-message:not(.d-block),
+.contact-form-actions .error-message:not(.d-block) {
+  display: none !important;
+}
+
+.section-title h2.subtitle {
+  margin: 0;
+}

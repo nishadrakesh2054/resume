@@ -1,11 +1,3 @@
-/**
-* Template Name: Craftivo
-* Template URL: https://bootstrapmade.com/craftivo-bootstrap-portfolio-template/
-* Updated: Oct 04 2025 with Bootstrap v5.3.8
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 (function() {
   "use strict";
 
@@ -105,23 +97,6 @@
   });
 
   /**
-   * Preloader — hide quickly (do not wait for all images)
-   */
-  const preloader = document.querySelector('#preloader');
-  if (preloader) {
-    const hidePreloader = () => {
-      preloader.classList.add('preloader-hidden');
-      setTimeout(() => preloader.remove(), 300);
-    };
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', hidePreloader, { once: true });
-    } else {
-      hidePreloader();
-    }
-    setTimeout(hidePreloader, 1200);
-  }
-
-  /**
    * Circular scroll progress + back to top (bottom-right)
    */
   const scrollProgressBtn = document.getElementById('scroll-progress-btn');
@@ -146,17 +121,20 @@
 
   if (scrollProgressBtn) {
     scrollProgressBtn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
     });
     window.addEventListener('scroll', updateScrollProgressCircle, { passive: true });
     window.addEventListener('load', updateScrollProgressCircle);
     updateScrollProgressCircle();
   }
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /**
    * Animation on scroll function and init
    */
   function aosInit() {
+    if (prefersReducedMotion || typeof AOS === 'undefined') return;
     AOS.init({
       duration: 600,
       easing: 'ease-in-out',
@@ -164,10 +142,17 @@
       mirror: false
     });
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', aosInit, { once: true });
+  function scheduleAosInit() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', aosInit, { once: true });
+    } else {
+      aosInit();
+    }
+  }
+  if (typeof AOS !== 'undefined') {
+    scheduleAosInit();
   } else {
-    aosInit();
+    document.addEventListener('enhancements-loaded', scheduleAosInit, { once: true });
   }
 
   /**
@@ -178,6 +163,10 @@
     if (!selectTyped || typeof Typed === 'undefined') return;
     let typed_strings = selectTyped.getAttribute('data-typed-items');
     typed_strings = typed_strings.split(',');
+    if (prefersReducedMotion) {
+      selectTyped.textContent = typed_strings[0] || '';
+      return;
+    }
     new Typed('.typed', {
       strings: typed_strings,
       loop: true,
@@ -186,28 +175,48 @@
       backDelay: 2000
     });
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initTyped, { once: true });
+  function scheduleTypedInit() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTyped, { once: true });
+    } else {
+      initTyped();
+    }
+  }
+  if (typeof Typed !== 'undefined') {
+    scheduleTypedInit();
   } else {
-    initTyped();
+    document.addEventListener('enhancements-loaded', scheduleTypedInit, { once: true });
   }
 
   /**
    * Animate the skills items on reveal
    */
-  let skillsAnimation = document.querySelectorAll('.skills-animation');
-  skillsAnimation.forEach((item) => {
-    new Waypoint({
-      element: item,
-      offset: '80%',
-      handler: function(direction) {
-        let progress = item.querySelectorAll('.progress .progress-bar');
-        progress.forEach(el => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%';
+  function initSkillsAnimation() {
+    const skillsAnimation = document.querySelectorAll('.skills-animation');
+    skillsAnimation.forEach((item) => {
+      const animateBars = () => {
+        item.querySelectorAll('.progress .progress-bar').forEach((el) => {
+          el.style.width = `${el.getAttribute('aria-valuenow')}%`;
         });
+      };
+      if (prefersReducedMotion || typeof Waypoint === 'undefined') {
+        animateBars();
+        return;
       }
+      new Waypoint({
+        element: item,
+        offset: '80%',
+        handler: function () {
+          animateBars();
+        }
+      });
     });
-  });
+  }
+  if (typeof Waypoint !== 'undefined') {
+    initSkillsAnimation();
+  } else {
+    document.addEventListener('enhancements-loaded', initSkillsAnimation, { once: true });
+  }
 
   /**
    * Correct scrolling position upon page load for URLs containing hash links.
@@ -219,8 +228,8 @@
           let section = document.querySelector(window.location.hash);
           let scrollMarginTop = getComputedStyle(section).scrollMarginTop;
           window.scrollTo({
-            top: section.offsetTop - parseInt(scrollMarginTop),
-            behavior: 'smooth'
+            top: section.offsetTop - parseInt(scrollMarginTop, 10),
+            behavior: prefersReducedMotion ? 'auto' : 'smooth'
           });
         }, 100);
       }
@@ -314,10 +323,22 @@
       const sentBox = contactForm.querySelector('.sent-message');
       const submitBtn = contactForm.querySelector('#contact-submit');
 
-      loading?.classList.add('d-block');
-      errorBox?.classList.remove('d-block');
-      sentBox?.classList.remove('d-block');
-      if (submitBtn) submitBtn.disabled = true;
+      if (loading) {
+        loading.classList.add('d-block');
+        loading.hidden = false;
+      }
+      if (errorBox) {
+        errorBox.classList.remove('d-block');
+        errorBox.hidden = true;
+      }
+      if (sentBox) {
+        sentBox.classList.remove('d-block');
+        sentBox.hidden = true;
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.setAttribute('aria-busy', 'true');
+      }
 
       const formData = new FormData(contactForm);
       const userSubject = formData.get('user_subject');
@@ -342,17 +363,27 @@
         }
 
         contactForm.reset();
-        sentBox?.classList.add('d-block');
+        if (sentBox) {
+          sentBox.classList.add('d-block');
+          sentBox.hidden = false;
+        }
       } catch (err) {
         if (errorBox) {
           errorBox.textContent =
             err.message ||
             'Something went wrong. Email me at sahanirakesh877@gmail.com';
           errorBox.classList.add('d-block');
+          errorBox.hidden = false;
         }
       } finally {
-        loading?.classList.remove('d-block');
-        if (submitBtn) submitBtn.disabled = false;
+        if (loading) {
+          loading.classList.remove('d-block');
+          loading.hidden = true;
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+        }
       }
     });
   }
