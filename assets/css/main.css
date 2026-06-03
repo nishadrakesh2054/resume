@@ -74,6 +74,20 @@ a:hover {
   text-decoration: none;
 }
 
+/* Bootstrap reboot adds underlines — keep chrome links clean */
+.navmenu a,
+.navmenu a:hover,
+.navmenu a:focus,
+.navmenu a:active,
+.navmenu a:visited,
+.footer a,
+.footer a:hover,
+.footer a:focus,
+.footer a:active,
+.footer a:visited {
+  text-decoration: none;
+}
+
 h1,
 h2,
 h3,
@@ -260,6 +274,7 @@ h6 {
     justify-content: space-between;
     white-space: nowrap;
     transition: 0.3s;
+    text-decoration: none;
   }
 
   .navmenu a i,
@@ -419,6 +434,7 @@ h6 {
     justify-content: space-between;
     white-space: nowrap;
     transition: 0.3s;
+    text-decoration: none;
   }
 
   .navmenu a i,
@@ -658,10 +674,12 @@ h6 {
   color: color-mix(in srgb, var(--default-color), transparent 20%);
   display: inline-block;
   line-height: 1;
+  text-decoration: none;
 }
 
 .footer .footer-links ul a:hover {
   color: var(--accent-color);
+  text-decoration: none;
 }
 
 .footer .footer-contact p {
