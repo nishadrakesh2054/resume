@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nishadrakesh2054.github.io/rakesh/sitemap.xml
