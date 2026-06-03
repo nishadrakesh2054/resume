@@ -1,0 +1,13 @@
+{
+  "name": "rakesh-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:content": "node scripts/build-content.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.8",
+    "dotenv": "^16.4.7",
+    "marked": "^15.0.7"
+  }
+}

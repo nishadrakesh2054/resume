@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8" /><title>Redirect</title></head><body>
+<script>
+var s=new URLSearchParams(location.search).get('slug');
+if(s)location.replace(s+'/');else location.replace('./');
+</script>
+<p><a href="./">Blog</a></p></body></html>

@@ -2,37 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://nishadrakesh2054.github.io/rakesh/</loc>
+    <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#about</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#resume</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#services</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#portfolio</loc>
+    <loc>https://nishadrakesh2054.github.io/rakesh/blog/</loc>
+    <lastmod>2026-06-03</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#contact</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://nishadrakesh2054.github.io/rakesh/case-studies/</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://nishadrakesh2054.github.io/rakesh/#faq</loc>
+    <loc>https://nishadrakesh2054.github.io/rakesh/blog/deploy-nextjs-with-coolify/</loc>
+    <lastmod>2026-06-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://nishadrakesh2054.github.io/rakesh/case-studies/arksh-store/</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
   </url>
 </urlset>

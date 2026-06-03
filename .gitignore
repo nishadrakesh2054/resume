@@ -1,0 +1,7 @@
+# Supabase / secrets (never commit real keys)
+.env
+.env.local
+assets/js/lib/supabase-config.js
+
+# Build
+node_modules/
