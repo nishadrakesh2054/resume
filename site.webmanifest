@@ -1,9 +1,9 @@
 {
   "name": "Rakesh Kumar Sahani — Full Stack Developer",
   "short_name": "Rakesh Sahani",
-  "description": "MERN & Next.js full stack developer portfolio — Kathmandu, Nepal",
-  "start_url": "/rakesh/",
-  "scope": "/rakesh/",
+  "description": "Full stack, frontend & backend developer in Kathmandu — MERN, PERN, Next.js, SEO",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0b1120",
   "theme_color": "#6366f1",
