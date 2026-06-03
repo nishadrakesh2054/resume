@@ -27,8 +27,6 @@ export function renderHeader(base, activeNav) {
             <li><a href="${home}#resume"${isActive('resume')}>Resume</a></li>
             <li><a href="${home}#services"${isActive('services')}>Services</a></li>
             <li><a href="${home}#portfolio"${isActive('portfolio')}>Portfolio</a></li>
-            <li><a href="${base}blog/"${isActive('blog')}>Blog</a></li>
-            <li><a href="${base}case-studies/"${isActive('case-studies')}>Case Studies</a></li>
             <li><a href="${home}#contact"${isActive('contact')}>Contact</a></li>
             <li><a href="${home}#faq"${isActive('faq')}>FAQ</a></li>
           </ul>

@@ -1,0 +1,39 @@
+/**
+ * Mobile-first performance — LCP, render path, below-fold deferrals
+ */
+
+/* Hero must paint immediately (AOS loads late via idle callback) */
+#hero [data-aos],
+#hero [data-aos].aos-animate {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* LCP image: prioritize decode on mobile */
+@media (max-width: 991.98px) {
+  .hero {
+    min-height: auto;
+    padding-top: 88px;
+    padding-bottom: 32px;
+  }
+
+  .hero-row {
+    min-height: 0;
+  }
+
+  .hero .hero-portrait {
+    max-width: min(100%, 320px);
+    margin-inline: auto;
+  }
+
+  .hero-visual-glow {
+    filter: blur(24px);
+  }
+
+  .hero-mesh {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99, 102, 241, 0.2), transparent 55%),
+      linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+  }
+}

@@ -155,7 +155,6 @@ h6 {
 .header .logo img {
   max-height: 80px;
   margin-right: 8px;
-  border: 1px solid red !important;
 }
 
 .header .logo h1 {

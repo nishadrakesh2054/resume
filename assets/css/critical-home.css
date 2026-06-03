@@ -1,0 +1,77 @@
+/* Minimal above-the-fold styles — full CSS loads async; hero paints first */
+
+:root {
+  --background-color: #0b1120;
+  --default-color: #9ca3af;
+  --heading-color: #f9fafb;
+  --accent-highlight: #06b6d4;
+  --default-font: "Roboto", system-ui, sans-serif;
+  --heading-font: "Mulish", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.index-page {
+  margin: 0;
+  font-family: var(--default-font);
+  color: var(--default-color);
+  background: var(--background-color);
+}
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 997;
+  padding: 8px 0;
+  color: var(--default-color);
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  min-height: 100dvh;
+  padding-top: 88px;
+  padding-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-mesh {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0b1120 0%, #0f172a 100%);
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-title {
+  margin: 0;
+  color: var(--heading-color);
+}
+
+.hero-name {
+  font-weight: 800;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #f9fafb 0%, #06b6d4 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero .hero-portrait {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 16px;
+}
