@@ -1,4 +1,0 @@
--- =============================================================================
--- OPTIONAL: Example seed (run AFTER schema.sql)
--- Blog only — run supabase/seed-coolify-blog.sql for the published article.
--- =============================================================================
