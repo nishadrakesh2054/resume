@@ -713,53 +713,48 @@ body.index-page {
   background: linear-gradient(135deg, var(--accent-color), var(--accent-highlight), var(--accent-secondary));
 }
 
-/* Skills column titles */
-.about .skills-showcase__title {
+/* Skills column titles + compact list (wins over main.css) */
+.about .content-wrapper .skills-showcase .skills-showcase__title {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
-  margin: 0 0 0.85rem;
-  padding-bottom: 0.55rem;
-  font-size: 0.7rem;
+  gap: 0.4rem;
+  margin: 0 0 0.65rem;
+  padding-bottom: 0.45rem;
+  font-size: 0.65rem;
   font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: 0.08em;
+  line-height: 1.25;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  color: rgba(103, 232, 249, 0.95);
-  border-bottom: 1px solid rgba(6, 182, 212, 0.2);
+  color: rgba(103, 232, 249, 0.9);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.18);
 }
 
-.about .skills-showcase__title::before {
+.about .content-wrapper .skills-showcase .skills-showcase__title::before {
   content: "";
   flex-shrink: 0;
-  width: 3px;
-  height: 0.75rem;
+  width: 2px;
+  height: 0.65rem;
   border-radius: 2px;
   background: linear-gradient(180deg, var(--accent-highlight, #06b6d4), var(--accent-secondary, #6366f1));
 }
 
-.about .skills-showcase .skills-list .skill-item {
-  margin-bottom: 1.1rem;
-}
-
-.about .skills-showcase .skills-list .skill-item .skill-info .skill-name {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.88);
-}
-
-.about .skills-showcase .skills-list .skill-item .skill-info .skill-percent {
+.about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-name {
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-percent {
+  font-size: 0.68rem;
   color: var(--accent-highlight, #06b6d4);
 }
 
 /* Skills */
-.about .skills-showcase .skills-list .skill-item .progress {
+.about .content-wrapper .skills-showcase .skills-list .skill-item .progress {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
-  height: 10px;
+  height: 6px;
 }
 
 .about .skills-showcase .skills-list .skill-item .progress .progress-bar {

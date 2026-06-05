@@ -1212,39 +1212,38 @@ section,
   margin-bottom: 16px;
 }
 
-.about .content-wrapper .skills-showcase h3 {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--heading-color);
-  margin-bottom: 32px;
-}
-
 .about .content-wrapper .skills-showcase .skills-list .skill-item {
-  margin-bottom: 28px;
+  margin-bottom: 0.85rem;
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  align-items: baseline;
+  gap: 0.2rem 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-name {
-  font-size: 15px;
-  font-weight: 600;
+  flex: 1 1 65%;
+  min-width: 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.35;
   color: var(--heading-color);
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-percent {
-  font-size: 15px;
-  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
   color: var(--accent-color);
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .progress {
-  height: 10px;
-  border-radius: 10px;
+  height: 6px;
+  border-radius: 999px;
   background: color-mix(in srgb, var(--default-color), transparent 94%);
   overflow: hidden;
 }
@@ -1306,9 +1305,6 @@ section,
     grid-template-columns: 1fr;
   }
 
-  .about .content-wrapper .skills-showcase h3 {
-    font-size: 24px;
-  }
 }
 
 @media (max-width: 576px) {
