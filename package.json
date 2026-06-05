@@ -3,7 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:content": "node scripts/build-content.mjs"
+    "build:content": "node scripts/build-content.mjs",
+    "seed:coolify": "node scripts/generate-coolify-seed.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",

@@ -10,81 +10,61 @@ import {
   SITE_ORIGIN,
 } from './html-utils.mjs';
 
-function renderBlogTags(tags) {
-  const list = Array.isArray(tags) ? tags.filter(Boolean).slice(0, 4) : [];
+function renderBlogTags(tags, max = 2) {
+  const list = Array.isArray(tags) ? tags.filter(Boolean).slice(0, max) : [];
   if (!list.length) return '';
-  return `<div class="blog-tags">${list.map((t) => `<span class="blog-tag">${escapeHtml(t)}</span>`).join('')}</div>`;
+  return `<div class="blog-tags blog-tags--compact">${list
+    .map((t) => `<span class="blog-tag">${escapeHtml(t)}</span>`)
+    .join('')}</div>`;
 }
 
 function blogPostHref(slug, prefix = '') {
   return `${prefix}${slug}/`;
 }
 
+function renderBlogCard(post, linkPrefix, index) {
+  const cover = normalizePublicUrl(post.cover_image_url);
+  const media = cover
+    ? `<div class="blog-card__media"><img src="${escapeHtml(optimizeImageUrl(cover, 560))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" width="280" height="158" /></div>`
+    : `<div class="blog-card__media blog-card__media--empty" aria-hidden="true"><i class="bi bi-journal-richtext"></i></div>`;
+
+  const readTime = post.reading_time_minutes ? `${post.reading_time_minutes} min` : '';
+  const metaParts = [
+    post.category ? escapeHtml(formatCategory(post.category)) : '',
+    formatDate(post.published_at),
+    readTime,
+  ].filter(Boolean);
+
+  const isLead = index === 0;
+
+  return `
+    <a class="blog-card${isLead ? ' blog-card--lead' : ''}" href="${blogPostHref(post.slug, linkPrefix)}" style="--blog-card-i: ${index}">
+      ${media}
+      <div class="blog-card__body">
+        <p class="blog-card__meta">${metaParts.join('<span class="blog-card__meta-sep" aria-hidden="true">·</span>')}</p>
+        <h2 class="blog-card__title">${escapeHtml(post.title)}</h2>
+        <p class="blog-card__excerpt">${escapeHtml(post.excerpt)}</p>
+        ${renderBlogTags(post.tags, 2)}
+        <span class="blog-card__cta">Read article <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
+      </div>
+    </a>`;
+}
+
 export function renderBlogFeed(posts, linkPrefix = '') {
   if (!posts.length) {
     return `<div class="content-state content-state--empty"><h2 class="content-state-title">No posts yet</h2></div>`;
   }
-  const featured = posts.find((p) => p.featured) || posts[0];
-  const rest = posts.filter((p) => p.slug !== featured.slug);
-  const showFeaturedBadge = Boolean(featured.featured);
 
-  const renderFeatured = (post) => {
-    const cover = normalizePublicUrl(post.cover_image_url);
-    const img = cover
-      ? `<div class="blog-featured__visual"><img src="${escapeHtml(optimizeImageUrl(cover, 960))}" alt="${escapeHtml(post.cover_image_alt || post.title)}" loading="eager" decoding="async" /><div class="blog-featured__shine" aria-hidden="true"></div></div>`
-      : `<div class="blog-featured__visual blog-featured__visual--placeholder" aria-hidden="true"><i class="bi bi-journal-richtext"></i></div>`;
-    const readTime = post.reading_time_minutes ? `${post.reading_time_minutes} min read` : '';
-    return `
-    <a class="blog-featured" href="${blogPostHref(post.slug, linkPrefix)}">
-      ${showFeaturedBadge ? '<span class="blog-featured__badge"><i class="bi bi-star-fill" aria-hidden="true"></i> Featured</span>' : '<span class="blog-featured__badge blog-featured__badge--latest">Latest</span>'}
-      <div class="blog-featured__grid">
-        <div class="blog-featured__content">
-          ${post.category ? `<span class="blog-pill">${escapeHtml(formatCategory(post.category))}</span>` : ''}
-          <h2 class="blog-featured__title">${escapeHtml(post.title)}</h2>
-          ${post.subtitle ? `<p class="blog-featured__subtitle">${escapeHtml(post.subtitle)}</p>` : ''}
-          <p class="blog-featured__excerpt">${escapeHtml(post.excerpt)}</p>
-          ${renderBlogTags(post.tags)}
-          <div class="blog-featured__meta">
-            <span><i class="bi bi-calendar3" aria-hidden="true"></i> ${escapeHtml(formatDate(post.published_at))}</span>
-            ${readTime ? `<span><i class="bi bi-clock" aria-hidden="true"></i> ${escapeHtml(readTime)}</span>` : ''}
-          </div>
-          <span class="blog-featured__cta">Read full article <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
-        </div>
-        ${img}
-      </div>
-    </a>`;
-  };
+  const cards = posts.map((post, i) => renderBlogCard(post, linkPrefix, i)).join('');
+  const countLabel = `${posts.length} article${posts.length === 1 ? '' : 's'}`;
 
-  const renderItem = (post, i) => {
-    const cover = normalizePublicUrl(post.cover_image_url);
-    const img = cover
-      ? `<div class="blog-item__thumb"><img src="${escapeHtml(optimizeImageUrl(cover, 400))}" alt="" loading="lazy" decoding="async" /></div>`
-      : `<div class="blog-item__thumb blog-item__thumb--empty"><i class="bi bi-file-text" aria-hidden="true"></i></div>`;
-    const readTime = post.reading_time_minutes ? `${post.reading_time_minutes} min` : '';
-    return `
-    <a class="blog-item" href="${blogPostHref(post.slug, linkPrefix)}" style="--blog-item-i: ${i}">
-      <div class="blog-item__date">
-        <span class="blog-item__day">${escapeHtml(formatDate(post.published_at))}</span>
-        ${readTime ? `<span class="blog-item__read">${escapeHtml(readTime)}</span>` : ''}
-      </div>
-      <div class="blog-item__main">
-        <div class="blog-item__head">
-          ${post.category ? `<span class="blog-pill blog-pill--sm">${escapeHtml(formatCategory(post.category))}</span>` : ''}
-          <h3 class="blog-item__title">${escapeHtml(post.title)}</h3>
-        </div>
-        <p class="blog-item__excerpt">${escapeHtml(post.excerpt)}</p>
-        ${renderBlogTags(post.tags)}
-      </div>
-      ${img}
-      <span class="blog-item__arrow" aria-hidden="true"><i class="bi bi-arrow-up-right"></i></span>
-    </a>`;
-  };
-
-  const listHtml = rest.length
-    ? `<div class="blog-list"><div class="blog-list__header"><h2 class="blog-list__heading">More articles</h2><span class="blog-list__count">${rest.length} post${rest.length === 1 ? '' : 's'}</span></div>${rest.map(renderItem).join('')}</div>`
-    : '';
-
-  return `<div class="blog-feed">${renderFeatured(featured)}${listHtml}</div>`;
+  return `<div class="blog-feed">
+    <div class="blog-feed__bar">
+      <span class="blog-feed__label">Published</span>
+      <span class="blog-feed__count">${countLabel}</span>
+    </div>
+    <div class="blog-grid">${cards}</div>
+  </div>`;
 }
 
 export function renderBlogPostPage(post) {
@@ -178,7 +158,18 @@ export function renderBlogPostPage(post) {
     image: ogImage || undefined,
   };
 
-  return { title, description, canonical, ogImage, article, jsonLd };
+  const extraSchema =
+    post.structured_data &&
+    typeof post.structured_data === 'object' &&
+    !Array.isArray(post.structured_data)
+      ? post.structured_data
+      : null;
+  const jsonLdGraph =
+    extraSchema && extraSchema['@type'] === 'FAQPage'
+      ? { '@context': 'https://schema.org', '@graph': [jsonLd, extraSchema] }
+      : jsonLd;
+
+  return { title, description, canonical, ogImage, article, jsonLd: jsonLdGraph };
 }
 
 function caseStudyHref(slug, prefix = '') {

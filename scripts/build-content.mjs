@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Pre-render blog & case studies from Supabase → static HTML + sitemap.xml
+ * Pre-render blog from Supabase → static HTML + sitemap.xml
  * Run: npm install && npm run build:content
  * Requires .env (copy from .env.example) or assets/js/lib/supabase-config.js
  */
@@ -8,16 +8,11 @@
 import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
 import { readFileSync } from 'fs';
-import { mkdir, writeFile, readdir, rm } from 'fs/promises';
+import { mkdir, writeFile, readdir, rm, readFile } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { renderPage } from './lib/page-shell.mjs';
-import {
-  renderBlogFeed,
-  renderBlogPostPage,
-  renderCaseFeed,
-  renderCaseStudyPage,
-} from './lib/render-content.mjs';
+import { renderBlogFeed, renderBlogPostPage } from './lib/render-content.mjs';
 import { absoluteUrl, formatDateIso, SITE_ORIGIN } from './lib/html-utils.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -42,13 +37,47 @@ function loadCredentials() {
   }
 
   if (!url || !key || url.includes('YOUR_PROJECT') || key.includes('YOUR_ANON')) {
-    console.error(
-      'Missing Supabase credentials. Copy .env.example to .env or fill assets/js/lib/supabase-config.js'
-    );
-    process.exit(1);
+    return null;
   }
 
   return { url, key };
+}
+
+/** Merge published posts from supabase/seeds/*.json (local source of truth when DB row missing). */
+async function loadLocalBlogSeeds() {
+  const seedsDir = join(ROOT, 'supabase/seeds');
+  let files;
+  try {
+    files = await readdir(seedsDir);
+  } catch {
+    return [];
+  }
+  const posts = [];
+  for (const file of files) {
+    if (!file.endsWith('.json')) continue;
+    try {
+      const raw = await readFile(join(seedsDir, file), 'utf8');
+      const row = JSON.parse(raw);
+      if (row?.slug && row.status === 'published') posts.push(row);
+    } catch (err) {
+      console.warn(`  skip seed ${file}: ${err.message}`);
+    }
+  }
+  return posts;
+}
+
+function mergeBlogPosts(remotePosts, localSeeds) {
+  const bySlug = new Map();
+  for (const p of remotePosts || []) bySlug.set(p.slug, p);
+  for (const p of localSeeds) {
+    const existing = bySlug.get(p.slug);
+    if (!existing || new Date(p.updated_at || p.published_at || 0) >= new Date(existing.updated_at || existing.published_at || 0)) {
+      bySlug.set(p.slug, { ...existing, ...p });
+    }
+  }
+  return [...bySlug.values()].sort(
+    (a, b) => new Date(b.published_at || 0) - new Date(a.published_at || 0)
+  );
 }
 
 async function cleanSlugDirs(parentDir, keepNames, keepFiles = []) {
@@ -86,45 +115,46 @@ ${body}
 }
 
 async function main() {
-  const { url, key } = loadCredentials();
-  const supabase = createClient(url, key);
+  const creds = loadCredentials();
+  const localSeeds = await loadLocalBlogSeeds();
 
-  console.log('Fetching published content from Supabase…');
+  let posts = [];
 
-  const [{ data: posts, error: postsErr }, { data: studies, error: studiesErr }] =
-    await Promise.all([
-      supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('status', 'published')
-        .order('published_at', { ascending: false }),
-      supabase
-        .from('case_studies')
-        .select('*')
-        .eq('status', 'published')
-        .order('published_at', { ascending: false }),
-    ]);
+  if (creds) {
+    const supabase = createClient(creds.url, creds.key);
+    console.log('Fetching published blog posts from Supabase…');
+    const { data: remotePosts, error: postsErr } = await supabase
+      .from('blog_posts')
+      .select('*')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+    if (postsErr) throw new Error(`blog_posts: ${postsErr.message}`);
+    posts = remotePosts || [];
+  } else {
+    console.warn(
+      'No Supabase credentials — building blog pages from supabase/seeds/*.json only.\n' +
+        '  Add .env or run supabase/seed-coolify-blog.sql in Supabase for production CMS.'
+    );
+  }
 
-  if (postsErr) throw new Error(`blog_posts: ${postsErr.message}`);
-  if (studiesErr) throw new Error(`case_studies: ${studiesErr.message}`);
-
-  const blogPosts = posts || [];
-  const caseStudies = studies || [];
+  const blogPosts = mergeBlogPosts(posts, localSeeds);
+  if (localSeeds.length) {
+    console.log(`Blog posts (${blogPosts.length}): ${blogPosts.map((p) => p.slug).join(', ')}`);
+  }
   const blogSlugs = new Set(blogPosts.map((p) => p.slug));
-  const studySlugs = new Set(caseStudies.map((s) => s.slug));
 
   await cleanSlugDirs(join(ROOT, 'blog'), blogSlugs);
-  await cleanSlugDirs(join(ROOT, 'case-studies'), studySlugs);
+
+  try {
+    await rm(join(ROOT, 'case-studies'), { recursive: true, force: true });
+    console.log('✓ removed case-studies/');
+  } catch {
+    /* already gone */
+  }
 
   const sitemapUrls = [
     { loc: absoluteUrl('/'), lastmod: formatDateIso(), changefreq: 'weekly', priority: '1.0' },
     { loc: absoluteUrl('/blog/'), lastmod: formatDateIso(), changefreq: 'weekly', priority: '0.9' },
-    {
-      loc: absoluteUrl('/case-studies/'),
-      lastmod: formatDateIso(),
-      changefreq: 'weekly',
-      priority: '0.9',
-    },
   ];
 
   // Blog index (static list — SEO + no client fetch required)
@@ -187,66 +217,6 @@ async function main() {
     console.log(`✓ blog/${post.slug}/index.html`);
   }
 
-  // Case studies index
-  const caseIndexMain = `
-      <section class="section content-page-hero case-hero">
-        <div class="case-hero__mesh" aria-hidden="true"></div>
-        <div class="container position-relative">
-          <nav class="content-breadcrumb" aria-label="Breadcrumb">
-            <a href="../index.html">Portfolio</a> / <span>Case studies</span>
-          </nav>
-          <p class="case-hero__eyebrow"><i class="bi bi-briefcase" aria-hidden="true"></i> Selected work</p>
-          <h1>Project deep dives</h1>
-          <p class="lead">Production builds — strategy, stack, challenges, and measurable outcomes.</p>
-        </div>
-      </section>
-      <section class="section pt-0"><div class="container">${renderCaseFeed(caseStudies)}</div></section>`;
-
-  await writeFile(
-    join(ROOT, 'case-studies/index.html'),
-    renderPage({
-      assetBase: '../',
-      activeNav: 'case-studies',
-      title: 'Case Studies | Rakesh Kumar Sahani — Full Stack Projects',
-      description:
-        'In-depth case studies of ecommerce, SaaS, and web projects built with React, Next.js, Node.js, and PostgreSQL.',
-      canonical: absoluteUrl('/case-studies/'),
-      bodyClass: 'content-page case-studies-page',
-      mainHtml: caseIndexMain,
-    }),
-    'utf8'
-  );
-  console.log('✓ case-studies/index.html');
-
-  for (const item of caseStudies) {
-    const dir = join(ROOT, 'case-studies', item.slug);
-    await mkdir(dir, { recursive: true });
-    const { title, description, canonical, ogImage, article, jsonLd } = renderCaseStudyPage(item);
-    await writeFile(
-      join(dir, 'index.html'),
-      renderPage({
-        assetBase: '../../',
-        activeNav: 'case-studies',
-        title,
-        description,
-        canonical,
-        ogImage,
-        ogType: 'article',
-        bodyClass: 'content-page case-studies-page case-detail-page',
-        mainHtml: article,
-        jsonLd,
-      }),
-      'utf8'
-    );
-    sitemapUrls.push({
-      loc: canonical,
-      lastmod: formatDateIso(item.updated_at || item.published_at),
-      changefreq: 'monthly',
-      priority: '0.85',
-    });
-    console.log(`✓ case-studies/${item.slug}/index.html`);
-  }
-
   const postRedirect = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8" /><title>Redirect</title></head><body>
 <script>
@@ -255,15 +225,6 @@ if(s)location.replace(s+'/');else location.replace('./');
 </script>
 <p><a href="./">Blog</a></p></body></html>`;
   await writeFile(join(ROOT, 'blog/post.html'), postRedirect, 'utf8');
-
-  const studyRedirect = `<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8" /><title>Redirect</title></head><body>
-<script>
-var s=new URLSearchParams(location.search).get('slug');
-if(s)location.replace(s+'/');else location.replace('./');
-</script>
-<p><a href="./">Case studies</a></p></body></html>`;
-  await writeFile(join(ROOT, 'case-studies/study.html'), studyRedirect, 'utf8');
 
   await writeFile(join(ROOT, 'sitemap.xml'), buildSitemap(sitemapUrls), 'utf8');
   console.log(`✓ sitemap.xml (${sitemapUrls.length} URLs)`);

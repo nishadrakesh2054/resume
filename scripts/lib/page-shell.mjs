@@ -65,7 +65,6 @@ export function renderFooter(base) {
               <li><a href="${home}#services">Services</a></li>
               <li><a href="${home}#portfolio">Portfolio</a></li>
               <li><a href="${base}blog/">Blog</a></li>
-              <li><a href="${base}case-studies/">Case Studies</a></li>
               <li><a href="${home}#contact">Contact</a></li>
               <li><a href="${home}#faq">FAQ</a></li>
             </ul>

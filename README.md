@@ -1,6 +1,6 @@
 # Portfolio — Rakesh Kumar Sahani
 
-Static portfolio on GitHub Pages with blog & case studies powered by Supabase.
+Static portfolio on GitHub Pages with blog powered by Supabase.
 
 **Live:** https://rakeshsahani.vercel.app/
 
@@ -19,7 +19,7 @@ git push
 | Path | Purpose |
 |------|---------|
 | `index.html` | Homepage |
-| `blog/`, `case-studies/` | Pre-built static pages (generated) |
+| `blog/` | Pre-built static blog pages (generated) |
 | `scripts/build-content.mjs` | Fetches Supabase → HTML + sitemap |
 | `supabase/schema.sql` | Database schema (run once in Supabase) |
 | `assets/` | CSS, JS, images |
@@ -32,3 +32,11 @@ git push
 ## Optional SQL
 
 - `supabase/seed-example.sql` — sample rows for testing only
+- `supabase/seed-coolify-blog.sql` — clears case studies + seeds one blog post (run in Supabase SQL Editor)
+- `supabase/seeds/*.json` — local blog source; merged by `npm run build:content` when DB is empty or ahead of remote
+
+Regenerate Coolify seed from markdown:
+
+```bash
+node scripts/generate-coolify-seed.mjs
+```
