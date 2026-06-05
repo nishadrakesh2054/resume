@@ -739,13 +739,13 @@ body.index-page {
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-name {
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .about .content-wrapper .skills-showcase .skills-list .skill-item .skill-info .skill-percent {
-  font-size: 0.68rem;
+  font-size: 0.8125rem;
   color: var(--accent-highlight, #06b6d4);
 }
 
@@ -754,7 +754,7 @@ body.index-page {
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
-  height: 6px;
+  height: 8px;
 }
 
 .about .skills-showcase .skills-list .skill-item .progress .progress-bar {
