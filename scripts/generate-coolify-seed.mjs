@@ -27,7 +27,7 @@ const post = {
   cover_image_url: '/assets/img/blogs/coolifyblog.png',
   cover_image_alt:
     'Coolify open-source self-hosting platform dashboard managing Docker application deployments on a developer VPS',
-  og_image_url: 'https://rakeshsahani.vercel.app/assets/img/blogs/coolifyblog.png',
+  og_image_url: 'https://rakeshsahani.com.np/assets/img/blogs/coolifyblog.png',
   meta_title: 'Coolify Hosting Platform Guide | Rakesh Kumar Sahani',
   meta_description:
     'Why developers choose the Coolify hosting platform: self-hosted PaaS, Docker deployment, automatic SSL, and real savings vs Heroku, Vercel, and Railway.',
@@ -45,7 +45,7 @@ const post = {
     'devops',
   ],
   canonical_url:
-    'https://rakeshsahani.vercel.app/blog/coolify-hosting-platform-guide/',
+    'https://rakeshsahani.com.np/blog/coolify-hosting-platform-guide/',
   seo_robots: 'index, follow',
   category: 'devops',
   tags: [

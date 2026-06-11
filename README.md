@@ -2,7 +2,7 @@
 
 Static portfolio on GitHub Pages with blog powered by Supabase.
 
-**Live:** https://rakeshsahani.vercel.app/
+**Live:** https://rakeshsahani.com.np/
 
 ## Publish content (after editing Supabase)
 
