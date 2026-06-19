@@ -19,22 +19,26 @@ const readingTime = Math.max(1, Math.round(wordCount / 200));
 const post = {
   slug: 'top-it-skills-nepal-2026',
   title: 'Top IT Skills in Demand in Nepal in 2026',
-  subtitle: 'Career guide for students, developers, and freelancers',
+  subtitle:
+    'A practical guide for students, developers, freelancers, and job seekers looking to build a successful tech career in Nepal.',
   excerpt:
-    'The top IT skills in Nepal for 2026: full stack, AI, cloud, cybersecurity, data, mobile, UI/UX & DevOps. Salary ranges, freelancing tips & learning paths for CSIT and BCA students.',
+    'Discover the most in-demand IT skills in Nepal in 2026 including React, Next.js, Laravel, AI, Cloud Computing, Cybersecurity, and Data Analytics. Learn what employers and freelancers are looking for.',
   body,
   body_format: 'markdown',
   cover_image_url: '/assets/img/blogs/it-skills-nepal-2026.png',
   cover_image_alt:
     'Nepali IT professionals learning in-demand tech skills including React, Laravel, cloud computing and AI in Kathmandu Nepal 2026',
   og_image_url: 'https://rakeshsahani.com.np/assets/img/blogs/it-skills-nepal-2026.png',
-  meta_title: 'Top IT Skills in Nepal 2026 | Career Guide',
+  meta_title: 'Top IT Skills in Demand in Nepal in 2026 | Career & Freelancing Guide',
   meta_description:
-    'Top IT skills in Nepal for 2026: full stack, AI, cloud & more. Salary ranges, freelancing tips & learning paths for CSIT, BCA & job seekers.',
+    'Discover the most in-demand IT skills in Nepal in 2026 including React, Next.js, Laravel, AI, Cloud Computing, Cybersecurity, and Data Analytics. Learn what employers and freelancers are looking for.',
   meta_keywords: [
     'top IT skills in Nepal',
+    'IT jobs in Nepal',
+    'best IT skills in Nepal',
     'IT skills in demand in Nepal 2026',
     'software development jobs Nepal',
+    'freelancing in Nepal',
     'best tech skills Nepal',
     'high paying IT jobs Nepal',
     'web development Nepal',
@@ -47,6 +51,7 @@ const post = {
     'backend developer Nepal',
     'freelancing skills Nepal',
     'remote jobs Nepal',
+    'tech careers Nepal',
     'IT career Nepal',
     'programming skills Nepal',
     'React developer Nepal',
