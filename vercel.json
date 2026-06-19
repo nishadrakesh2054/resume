@@ -1,0 +1,40 @@
+{
+  "buildCommand": "npm run build:content",
+  "redirects": [
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/index.html",
+      "destination": "/blog/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/coolify-hosting-platform-guide",
+      "destination": "/blog/coolify-hosting-platform-guide/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/top-it-skills-nepal-2026",
+      "destination": "/blog/top-it-skills-nepal-2026/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=3600"
+        }
+      ]
+    }
+  ]
+}

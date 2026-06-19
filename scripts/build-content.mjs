@@ -99,7 +99,7 @@ function buildSitemap(urls) {
   const body = urls
     .map(
       (u) => `  <url>
-    <loc>${u.loc}</loc>
+    <loc>${escapeXmlUrl(u.loc)}</loc>
     <lastmod>${u.lastmod}</lastmod>
     <changefreq>${u.changefreq}</changefreq>
     <priority>${u.priority}</priority>
@@ -112,6 +112,15 @@ function buildSitemap(urls) {
 ${body}
 </urlset>
 `;
+}
+
+function escapeXmlUrl(url) {
+  return String(url)
+    .replace(/&/g, '&amp;')
+    .replace(/'/g, '&apos;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 async function main() {
@@ -216,7 +225,7 @@ async function main() {
       'utf8'
     );
     sitemapUrls.push({
-      loc: canonical,
+      loc: canonical.replace(/\/?$/, '/'),
       lastmod: formatDateIso(post.updated_at || post.published_at),
       changefreq: 'monthly',
       priority: '0.8',

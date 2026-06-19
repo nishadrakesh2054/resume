@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "npm run build:content",
     "build:content": "node scripts/build-content.mjs",
     "seed:coolify": "node scripts/generate-coolify-seed.mjs",
     "seed:it-skills": "node scripts/generate-it-skills-seed.mjs"
