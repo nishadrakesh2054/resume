@@ -121,15 +121,22 @@ async function main() {
   let posts = [];
 
   if (creds) {
-    const supabase = createClient(creds.url, creds.key);
-    console.log('Fetching published blog posts from Supabase…');
-    const { data: remotePosts, error: postsErr } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
-    if (postsErr) throw new Error(`blog_posts: ${postsErr.message}`);
-    posts = remotePosts || [];
+    try {
+      const supabase = createClient(creds.url, creds.key);
+      console.log('Fetching published blog posts from Supabase…');
+      const { data: remotePosts, error: postsErr } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .eq('status', 'published')
+        .order('published_at', { ascending: false });
+      if (postsErr) {
+        console.warn(`Supabase unavailable (${postsErr.message}) — using supabase/seeds/*.json only.`);
+      } else {
+        posts = remotePosts || [];
+      }
+    } catch (err) {
+      console.warn(`Supabase fetch failed (${err.message}) — using supabase/seeds/*.json only.`);
+    }
   } else {
     console.warn(
       'No Supabase credentials — building blog pages from supabase/seeds/*.json only.\n' +
