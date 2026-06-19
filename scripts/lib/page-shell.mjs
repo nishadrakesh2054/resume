@@ -147,6 +147,7 @@ export function renderPage(opts) {
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
     <meta name="robots" content="index, follow" />
+    <meta name="google-site-verification" content="6qdqHWQKIdd9mUAkYanKo-4_zGvObhsGP2vSpPvHkBI" />
     <link rel="canonical" href="${escapeHtml(canonical)}" />
     <meta property="og:type" content="${escapeHtml(ogType)}" />
     <meta property="og:site_name" content="Rakesh Kumar Sahani Portfolio" />

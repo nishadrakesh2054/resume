@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 
-export const SITE_ORIGIN = 'https://rakeshsahani.vercel.app';
+export const SITE_ORIGIN = 'https://rakeshsahani.com.np';
 
 marked.setOptions({ gfm: true, breaks: false });
 
